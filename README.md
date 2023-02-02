@@ -1,7 +1,5 @@
 # LABECOIN
 
-Solo quiero ver q vaya lo del commit
-
 Proyecto de la asignatura Inteligencia Artificial y Sistemas Inteligentes. Escuela Politécnica de Cáceres
 
 Se pide diseñar e implementar un sistema relacionado con los movimientos y acciones de un robot que
