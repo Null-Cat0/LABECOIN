@@ -9,7 +9,7 @@ en el camino. Como salida de la aplicación, deben mostrarse los movimientos del
 tablero de entrada podrá ser diferente en cada caso, aunque el tamaño es siempre de 10 x 10. Las celdas
 tienen un valor asignado que se corresponden con:
 
-0 – CELDA VACÍA 9 – MURO 8 – ROBOT 7 – SALIDA 1-6 – MONEDAS
+0 – CELDA VACÍA   9 – MURO   8 – ROBOT   7 – SALIDA   1-6 – MONEDAS
 
 El movimiento del robot puede ser Arriba, aBajo, Derecha, Izquierda, y las diagonales (AI, AD, BD, BI).
 No se podrá mover a una casilla que haya un muro. Cuando se mueva a una casilla con monedas, debe
