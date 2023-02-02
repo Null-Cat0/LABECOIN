@@ -1,0 +1,3 @@
+1- La heuristica sería la distancia moneda mas cercana, depsués de tener el valor necesario para poder pagar la salida, la heuristica cambiaria a la distancia a la salida.
+
+[2- La heuristica sería la distancia a la moneda más alta, despues de tener el valor necesario para poder pagar la salida, la heuristica cambiaria a la distancia a la salida.]
