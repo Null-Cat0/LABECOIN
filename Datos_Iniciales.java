@@ -1,4 +1,7 @@
 import java.io.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class Datos_Iniciales {
 
@@ -6,7 +9,6 @@ public class Datos_Iniciales {
 	int[][] tablero;// Tablero de juego
 	int cartera;
 	int N; // Número de filas x columnas del fichero
-    public Object get;
 
 	public Datos_Iniciales(String _nombre) {
 
@@ -16,6 +18,7 @@ public class Datos_Iniciales {
 		leerFichero();
 
 	}
+
 	private int ordenMatriz()
 	{	
 		int aux = 0;
@@ -47,6 +50,7 @@ public class Datos_Iniciales {
 		return aux;
 		
 	}
+
 	private void leerFichero() {
 
 		BufferedReader br = null;
@@ -126,6 +130,28 @@ public class Datos_Iniciales {
 			}
 		}
 		return -1;
+	}
+
+	public List getListaMonedas()
+	{
+		List <Moneda> listaMonedas = new ArrayList<>();
+		for (int i = 0; i < N; i++) {
+			for (int j = 0; j < N; j++) {
+				if((tablero[i][j]<=6)&&(tablero[i][j] >= 1))
+				{
+					//Creamos Moneda
+					Moneda aux = new Moneda();
+					aux.setColumnaMoneda(j);
+					aux.setFilaMoneda(i);
+					//Insertamos Moneda
+					listaMonedas.add(aux);
+				}
+					
+			}
+		}
+		//Para ordenar las monedas en valor descendente (de mayor valor a menor valor)
+		// Collections.sort(listaMonedas,Collections.reverseOrder (new ComparatorValorMoneda()));
+		return listaMonedas;
 	}
 
 	// Prueba de lectura del fichero
