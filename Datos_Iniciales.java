@@ -12,7 +12,7 @@ public class Datos_Iniciales {
 
 	public Datos_Iniciales(String _nombre) {
 
-		nombre = _nombre;
+		nombre = "Ejemplos/"+ _nombre;
 		N = ordenMatriz();
 		tablero = new int[N][N];// Reservar espacio en la memoria para la matriz
 		leerFichero();
