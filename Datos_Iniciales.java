@@ -132,7 +132,7 @@ public class Datos_Iniciales {
 		return -1;
 	}
 
-	public List getListaMonedas()
+	public List<Moneda> getListaMonedas()
 	{
 		List <Moneda> listaMonedas = new ArrayList<>();
 		for (int i = 0; i < N; i++) {
