@@ -93,7 +93,7 @@ public class Principal {
         }
 
         d = new Datos_Iniciales(nombreFichero);
-        impresionMatrizVisual(d.getMatriz(), d.N);
+       // impresionMatrizVisual(d.getMatriz(), d.N);
 
     }
 }
