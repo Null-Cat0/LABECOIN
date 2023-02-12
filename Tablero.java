@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -73,7 +74,7 @@ public class Tablero {
             default:
                 valor = 0;
         }
-            return valor;
+        return valor;
     }
 
     public boolean posicionLibre(int i, int j) {
@@ -172,11 +173,11 @@ public class Tablero {
         int columnaRobot = r.getColumnaRobot();
         int filaMoneda = m.getFilaMoneda();
         int columnaMoneda = m.getColumnaMoneda();
-        return (Math.sqrt(Math.pow(columnaMoneda - columnaRobot, 2) + Math.pow(filaMoneda - filaRobot, 2))) / 100;
+        return (Math.sqrt(Math.pow(columnaMoneda - columnaRobot, 2) + Math.pow(filaMoneda - filaRobot, 2))) ;
     }
 
     public double calcularHeuristica(Robot r, Moneda m) {
-        return (calcularDistancia(r, m) * 40) + (m.valorMoneda / 100) * 60;
+        return (calcularDistancia(r, m) * 1) + (m.valorMoneda ) * 0.25;
     }
 
     public Casilla[][] getMatriz() {
@@ -186,9 +187,11 @@ public class Tablero {
     public int getCartera() {
         return this.cartera;
     }
+
     public void reducirCartera(int valor) {
-         this.cartera -= valor;
+        this.cartera -= valor;
     }
+
     public Tablero copiarTablero() {
         Tablero tab = new Tablero(N);
         for (int i = 0; i < N; i++) {
@@ -238,6 +241,29 @@ public class Tablero {
                 }
             }
         }
+    }
+
+    public void cargarHeuristicaMonedasv2() {
+        double mejor = calcularHeuristica(r, listaMonedas.get(0));
+        Moneda mejorM = new Moneda(listaMonedas.get(0).getFilaMoneda(), listaMonedas.get(0).getColumnaMoneda(),
+                listaMonedas.get(0).getValorMoneda(), listaMonedas.get(0).heuristica);
+        listaMonedas.get(0).setHeuristica(mejor);
+        // System.out.print("MEJOR: "+mejor);
+
+        for (int i = 1; i < listaMonedas.size(); i++) {
+            double aux = calcularHeuristica(r, listaMonedas.get(i));
+            listaMonedas.get(i).setHeuristica(aux);
+            // System.out.println(" AUX: "+aux);
+            if (aux < mejor) {
+                mejorM = listaMonedas.get(i);
+                mejor = aux;
+            }
+        }
+        mObjetivo = mejorM;
+        listaMonedas.remove(mObjetivo);
+        Collections.sort(listaMonedas,new ComparatorHeuristica());
+        // System.out.print("MEJOR: "+mejor+ mejorM.getFilaMoneda()+"
+        // "+mejorM.getColumnaMoneda());
     }
 
     @Override

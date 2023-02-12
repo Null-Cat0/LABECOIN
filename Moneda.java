@@ -2,16 +2,17 @@ public class Moneda {
     int filaMoneda;
     int columnaMoneda;
     int valorMoneda;
-
+    double heuristica;
     Moneda() {
         filaMoneda = 0;
         columnaMoneda = 0;
         valorMoneda = 0;
     }
-    Moneda(int _fila, int _columna, int _valorMoneda) {
-        filaMoneda = 0;
-        columnaMoneda = 0;
-        valorMoneda = 0;
+    Moneda(int _fila, int _columna, int _valorMoneda, double heuristica) {
+        filaMoneda = _fila;
+        columnaMoneda =_columna ;
+        valorMoneda = _valorMoneda;
+        this.heuristica=heuristica;
     }
     public int getFilaMoneda() {
         return this.filaMoneda;
@@ -35,6 +36,13 @@ public class Moneda {
 
     public void setColumnaMoneda(int _columnaMoneda) {
         this.columnaMoneda = _columnaMoneda;
+    }
+    public void setHeuristica(double  h) {
+        this.heuristica = h;
+    }
+    
+    public double getHeuristica() {
+        return this.heuristica ;
     }
 
 }

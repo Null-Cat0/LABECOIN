@@ -1,7 +1,7 @@
 public class Robot {
     private int filaRobot;
     private int columnaRobot;
-
+    private double heuristica;
     Robot() {
         filaRobot = 0;
         columnaRobot = 0;
@@ -21,5 +21,12 @@ public class Robot {
 
     public void setColumnaRobot(int columna) {
         this.columnaRobot = columna;
+    }
+
+    public void setHeuristica(double haux) {
+        this.heuristica = haux;
+    }
+    public double getHeuristica() {
+        return this.heuristica ;
     }
 }
