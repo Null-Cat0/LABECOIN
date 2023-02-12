@@ -1,15 +1,18 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class Tablero {
     Robot r;
     List<Moneda> listaMonedas;
-    int[][] matriz;
+    Moneda mObjetivo;
+    Casilla[][] matriz;
     int cartera;
     String lastMov;
     int N;
 
-    Tablero(List<Moneda> _listaMonedas, int filaRobot, int columnaRobot, int[][] _matriz, int _cartera, int _N) {
+    Tablero(List<Moneda> _listaMonedas, int filaRobot, int columnaRobot, Casilla[][] _matriz, int _cartera, int _N) {
         r = new Robot();
         r.setColumnaRobot(filaRobot);
         r.setFilaRobot(columnaRobot);
@@ -23,13 +26,58 @@ public class Tablero {
     Tablero(int _N) {
         r = new Robot();
         listaMonedas = new ArrayList<>();
-        matriz = new int[_N][_N];
+        matriz = new Casilla[_N][_N];
         cartera = 0;
         this.N = _N;
     }
 
+    public Double obtenerHeuristicaMov(String direccion) {
+
+        int fila = this.r.getFilaRobot();
+        int columna = this.r.getColumnaRobot();
+        double valor;
+        switch (direccion) {
+            case "A":
+                valor = this.matriz[fila - 1][columna].getHeuristica();
+                break;
+
+            case "B":
+                valor = this.matriz[fila + 1][columna].getHeuristica();
+                break;
+
+            case "D":
+                valor = this.matriz[fila][columna + 1].getHeuristica();
+                break;
+
+            case "I":
+                valor = this.matriz[fila][columna - 1].getHeuristica();
+                break;
+
+            // Diagonales
+            case "AI":
+                valor = this.matriz[fila - 1][columna - 1].getHeuristica();
+                break;
+
+            case "AD":
+                valor = this.matriz[fila - 1][columna + 1].getHeuristica();
+                break;
+
+            case "BD":
+                valor = this.matriz[fila + 1][columna + 1].getHeuristica();
+                break;
+
+            case "BI":
+                valor = this.matriz[fila + 1][columna - 1].getHeuristica();
+                break;
+
+            default:
+                valor = 0;
+        }
+            return valor;
+    }
+
     public boolean posicionLibre(int i, int j) {
-        return matriz[i][j] != 9;
+        return matriz[i][j].getValor() != 9;
     }
 
     public List<String> obtenerPosiblesMov() {
@@ -69,47 +117,47 @@ public class Tablero {
 
         switch (direccion) {
             case "A":
-                if (matriz[r.getFilaRobot() - 1][r.getColumnaRobot()] != 9)
+                if (matriz[r.getFilaRobot() - 1][r.getColumnaRobot()].getValor() != 9)
                     r.setFilaRobot(r.getFilaRobot() - 1);
                 break;
 
             case "B":
-                if (matriz[r.getFilaRobot() + 1][r.getColumnaRobot()] != 9)
+                if (matriz[r.getFilaRobot() + 1][r.getColumnaRobot()].getValor() != 9)
                     r.setFilaRobot(r.getFilaRobot() + 1);
                 break;
 
             case "D":
-                if (matriz[r.getFilaRobot()][r.getColumnaRobot() + 1] != 9)
+                if (matriz[r.getFilaRobot()][r.getColumnaRobot() + 1].getValor() != 9)
                     r.setColumnaRobot(r.getColumnaRobot() + 1);
                 break;
 
             case "I":
-                if (matriz[r.getFilaRobot()][r.getColumnaRobot() - 1] != 9)
+                if (matriz[r.getFilaRobot()][r.getColumnaRobot() - 1].getValor() != 9)
                     r.setColumnaRobot(r.getColumnaRobot() - 1);
                 break;
 
             // Diagonales
             case "AI":
-                if (matriz[r.getFilaRobot() - 1][r.getColumnaRobot() - 1] != 9)
+                if (matriz[r.getFilaRobot() - 1][r.getColumnaRobot() - 1].getValor() != 9)
 
                     r.setFilaRobot(r.getFilaRobot() - 1);
                 r.setColumnaRobot(r.getColumnaRobot() - 1);
                 break;
 
             case "AD":
-                if (matriz[r.getFilaRobot() - 1][r.getColumnaRobot() + 1] != 9)
+                if (matriz[r.getFilaRobot() - 1][r.getColumnaRobot() + 1].getValor() != 9)
                     r.setFilaRobot(r.getFilaRobot() - 1);
                 r.setColumnaRobot(r.getColumnaRobot() + 1);
                 break;
 
             case "BD":
-                if (matriz[r.getFilaRobot() + 1][r.getColumnaRobot() + 1] != 9)
+                if (matriz[r.getFilaRobot() + 1][r.getColumnaRobot() + 1].getValor() != 9)
                     r.setFilaRobot(r.getFilaRobot() + 1);
                 r.setColumnaRobot(r.getColumnaRobot() + 1);
                 break;
 
             case "BI":
-                if (matriz[r.getFilaRobot() + 1][r.getColumnaRobot() - 1] != 9)
+                if (matriz[r.getFilaRobot() + 1][r.getColumnaRobot() - 1].getValor() != 9)
                     r.setFilaRobot(r.getFilaRobot() + 1);
                 r.setColumnaRobot(r.getColumnaRobot() - 1);
                 break;
@@ -131,14 +179,16 @@ public class Tablero {
         return (calcularDistancia(r, m) * 40) + (m.valorMoneda / 100) * 60;
     }
 
-    public int[][] getMatriz() {
+    public Casilla[][] getMatriz() {
         return this.matriz;
     }
 
     public int getCartera() {
         return this.cartera;
     }
-
+    public void reducirCartera(int valor) {
+         this.cartera -= valor;
+    }
     public Tablero copiarTablero() {
         Tablero tab = new Tablero(N);
         for (int i = 0; i < N; i++) {
@@ -173,6 +223,37 @@ public class Tablero {
 
     }
 
+    public void cargarHeuristicaMonedas() {
+        double haux;
+        for (int h = 0; h < listaMonedas.size(); h++) {
+            for (int i = 0; i < N; i++) {
+                for (int j = 0; j < N; j++) {
+                    if (this.matriz[i][j].getValor() != 9) {
+                        Moneda aux = listaMonedas.get(h);
+                        haux = this.calcularHeuristica(r, aux);
+                        if (haux < this.matriz[i][j].getHeuristica()) {
+                            this.matriz[i][j].setHeuristica(haux);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Tablero other = (Tablero) obj;
+        return N == other.N && Objects.equals(listaMonedas, other.listaMonedas)
+                && Objects.equals(lastMov, other.lastMov)
+                && Arrays.deepEquals(matriz, other.matriz) && cartera == other.cartera
+                && Objects.equals(r, other.r);
+    }
     // public static void main(String[] args) {
     // Datos_Iniciales d = new Datos_Iniciales("LABECOIN1.txt");
     // Tablero n = d.getTablero();

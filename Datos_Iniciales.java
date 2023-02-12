@@ -6,7 +6,7 @@ import java.util.List;
 public class Datos_Iniciales {
 
 	private String nombre; // Nombre del fichero
-	int[][] matrizAuxiliar;
+	Casilla[][] matrizAuxiliar;
 	private Tablero tab;
 	int N_Aux;
 	int cartera_Aux;
@@ -15,7 +15,7 @@ public class Datos_Iniciales {
 
 		nombre = "Ejemplos/" + _nombre;
 		N_Aux = ordenMatriz();
-		matrizAuxiliar = new int[N_Aux][N_Aux];// Reservar espacio en la memoria para la matriz
+		matrizAuxiliar = new Casilla[N_Aux][N_Aux];// Reservar espacio en la memoria para la matriz
 		leerFichero();
 		tab = new Tablero(this.getListaMonedas(), this.getFilaRobot(), this.getColumnaRobot(), matrizAuxiliar,
 				cartera_Aux, N_Aux);
@@ -73,10 +73,11 @@ public class Datos_Iniciales {
 				String[] parts = texto.split(","); // Division de la fila
 
 				for (j = 0; j < N; j++) {
-					matrizAuxiliar[i][j] = Integer.valueOf(parts[j]);
+					matrizAuxiliar[i][j] = new Casilla (i,j,Integer.valueOf(parts[j]),15);
 				}
 
 				texto = br.readLine(); // Siguiente línea
+				
 				i++;
 			}
 			System.out.println("Cartera: " + cartera_Aux);
@@ -103,12 +104,12 @@ public class Datos_Iniciales {
 		List<Moneda> listaMonedas = new ArrayList<>();
 		for (int i = 0; i < N; i++) {
 			for (int j = 0; j < N; j++) {
-				if ((this.matrizAuxiliar[i][j] <= 6) && (this.matrizAuxiliar[i][j] >= 1)) {
+				if ((this.matrizAuxiliar[i][j].getValor() <= 6) && (this.matrizAuxiliar[i][j].getValor() >= 1)) {
 					// Creamos Moneda
 					Moneda aux = new Moneda();
 					aux.setColumnaMoneda(j);
 					aux.setFilaMoneda(i);
-					aux.setValorMoneda(this.matrizAuxiliar[i][j]);
+					aux.setValorMoneda(this.matrizAuxiliar[i][j].getValor());
 					// Insertamos Moneda
 					listaMonedas.add(aux);
 				}
@@ -125,7 +126,7 @@ public class Datos_Iniciales {
 		int N = N_Aux;
 		for (int i = 0; i < N; i++) {
 			for (int j = 0; j < N; j++) {
-				if (matrizAuxiliar[i][j] == 8)
+				if (matrizAuxiliar[i][j].getValor() == 8)
 					return i;
 			}
 		}
@@ -136,7 +137,7 @@ public class Datos_Iniciales {
 		int N = N_Aux;
 		for (int i = 0; i < N; i++) {
 			for (int j = 0; j < N; j++) {
-				if (matrizAuxiliar[i][j] == 8)
+				if (matrizAuxiliar[i][j].getValor() == 8)
 					return j;
 			}
 		}

@@ -8,7 +8,11 @@ public class Moneda {
         columnaMoneda = 0;
         valorMoneda = 0;
     }
-
+    Moneda(int _fila, int _columna, int _valorMoneda) {
+        filaMoneda = 0;
+        columnaMoneda = 0;
+        valorMoneda = 0;
+    }
     public int getFilaMoneda() {
         return this.filaMoneda;
     }
