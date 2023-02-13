@@ -7,7 +7,7 @@ import java.util.Objects;
 public class Tablero {
     Robot r;
     List<Moneda> listaMonedas;
-    Moneda mObjetivo;
+    Moneda mObjetivo = null;
     Casilla[][] matriz;
     int cartera;
     String lastMov;
@@ -173,11 +173,11 @@ public class Tablero {
         int columnaRobot = r.getColumnaRobot();
         int filaMoneda = m.getFilaMoneda();
         int columnaMoneda = m.getColumnaMoneda();
-        return (Math.sqrt(Math.pow(columnaMoneda - columnaRobot, 2) + Math.pow(filaMoneda - filaRobot, 2))) ;
+        return (Math.sqrt(Math.pow(columnaMoneda - columnaRobot, 2) + Math.pow(filaMoneda - filaRobot, 2)));
     }
 
     public double calcularHeuristica(Robot r, Moneda m) {
-        return (calcularDistancia(r, m) * 1) + (m.valorMoneda ) * 0.25;
+        return (calcularDistancia(r, m) * 1) + (m.valorMoneda) * 0.25;
     }
 
     public Casilla[][] getMatriz() {
@@ -259,9 +259,11 @@ public class Tablero {
                 mejor = aux;
             }
         }
-        mObjetivo = mejorM;
-        listaMonedas.remove(mObjetivo);
-        Collections.sort(listaMonedas,new ComparatorHeuristica());
+        if (mObjetivo == null) {
+            mObjetivo = mejorM;
+            listaMonedas.remove(mObjetivo);
+            Collections.sort(listaMonedas, new ComparatorHeuristica());
+        }
         // System.out.print("MEJOR: "+mejor+ mejorM.getFilaMoneda()+"
         // "+mejorM.getColumnaMoneda());
     }
