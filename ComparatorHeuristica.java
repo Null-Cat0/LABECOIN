@@ -1,9 +1,9 @@
 import java.util.Comparator;
 
-public class ComparatorHeuristica implements Comparator<Moneda> {
+public class ComparatorHeuristica implements Comparator<Casilla> {
 
     @Override
-    public int compare(Moneda o1, Moneda o2) {
+    public int compare(Casilla o1, Casilla o2) {
         // TODO Auto-generated method stub
         if (o1.getHeuristica() == o2.getHeuristica())
             return 0;

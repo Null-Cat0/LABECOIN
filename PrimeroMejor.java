@@ -20,20 +20,20 @@ public class PrimeroMejor {
         contadorNodos = 0;
         actual.cargarHeuristicaMonedasv2();
 
-        System.out.println("Posicion  robot : "+actual.r.getFilaRobot() + " " + actual.r.getColumnaRobot());
-        System.out.println("MONEDA OBJETIVO: "+actual.mObjetivo.getFilaMoneda()+" "+actual.mObjetivo.getColumnaMoneda()+" " +actual.mObjetivo.getHeuristica());
+        System.out.println("Posicion  robot : "+actual.r.getFila() + " " + actual.r.getColumna());
+        System.out.println("MONEDA OBJETIVO: "+actual.mObjetivo.getFila()+" "+actual.mObjetivo.getColumna()+" " +actual.mObjetivo.getHeuristica());
         for(int i=0; i< actual.listaMonedas.size();i++)
         {
-            System.out.println("VALOR: "+actual.listaMonedas.get(i).getValorMoneda()+" FILA: "+actual.listaMonedas.get(i).getFilaMoneda()+" COLUMNA: "+actual.listaMonedas.get(i).getColumnaMoneda()+" HEURISTICA: "+actual.listaMonedas.get(i).heuristica);
+            System.out.println("VALOR: "+actual.listaMonedas.get(i).getValor()+" FILA: "+actual.listaMonedas.get(i).getFila()+" COLUMNA: "+actual.listaMonedas.get(i).getColumna()+" HEURISTICA: "+actual.listaMonedas.get(i).heuristica);
         }
         System.out.println("MOVEMOS ROBOT HACIA LA IZQ");
         actual.movimientoRobot("I");
-        System.out.println("Posicion  robot : "+actual.r.getFilaRobot() + " " + actual.r.getColumnaRobot());
+        System.out.println("Posicion  robot : "+actual.r.getFila() + " " + actual.r.getColumna());
         actual.cargarHeuristicaMonedasv2();
-        System.out.println("MONEDA OBJETIVO: "+actual.mObjetivo.getFilaMoneda()+" "+actual.mObjetivo.getColumnaMoneda()+" " +actual.mObjetivo.getHeuristica());
+        System.out.println("MONEDA OBJETIVO: "+actual.mObjetivo.getFila()+" "+actual.mObjetivo.getColumna()+" " +actual.mObjetivo.getHeuristica());
         for(int i=0; i< actual.listaMonedas.size();i++)
         {
-            System.out.println("VALOR: "+actual.listaMonedas.get(i).getValorMoneda()+" FILA: "+actual.listaMonedas.get(i).getFilaMoneda()+" COLUMNA: "+actual.listaMonedas.get(i).getColumnaMoneda()+" HEURISTICA: "+actual.listaMonedas.get(i).heuristica);
+            System.out.println("VALOR: "+actual.listaMonedas.get(i).getValor()+" FILA: "+actual.listaMonedas.get(i).getFila()+" COLUMNA: "+actual.listaMonedas.get(i).getColumna()+" HEURISTICA: "+actual.listaMonedas.get(i).heuristica);
         }
        
     }

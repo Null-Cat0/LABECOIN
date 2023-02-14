@@ -29,7 +29,7 @@ public class Datos_Iniciales {
 
 			br = new BufferedReader(new FileReader(nombre));
 
-			String texto = br.readLine(); // Primera línea, no necesaria.
+			String texto = br.readLine(); // Primera lÃ­nea, no necesaria.
 			texto = br.readLine(); // Primera fila de la matriz.
 			String[] parts = texto.split(","); // Division de la fila
 			aux = parts.length;
@@ -63,20 +63,20 @@ public class Datos_Iniciales {
 			br = new BufferedReader(new FileReader(nombre));
 
 			String texto = br.readLine();
-			cartera_Aux = Integer.valueOf(texto); // Lectura de la primera línea
+			cartera_Aux = Integer.valueOf(texto); // Lectura de la primera lÃ­nea
 
 			texto = br.readLine();
 
 			while (texto != null && i < N) {
 
-				// Tratamiento de la línea leida
+				// Tratamiento de la lÃ­nea leida
 				String[] parts = texto.split(","); // Division de la fila
 
 				for (j = 0; j < N; j++) {
 					matrizAuxiliar[i][j] = new Casilla (i,j,Integer.valueOf(parts[j]),15);
 				}
 
-				texto = br.readLine(); // Siguiente línea
+				texto = br.readLine(); // Siguiente lÃ­nea
 				
 				i++;
 			}
@@ -99,17 +99,17 @@ public class Datos_Iniciales {
 		}
 	}
 
-	private List<Moneda> getListaMonedas() {
+	private List<Casilla> getListaMonedas() {
 		int N = N_Aux;
-		List<Moneda> listaMonedas = new ArrayList<>();
+		List<Casilla> listaMonedas = new ArrayList<>();
 		for (int i = 0; i < N; i++) {
 			for (int j = 0; j < N; j++) {
 				if ((this.matrizAuxiliar[i][j].getValor() <= 6) && (this.matrizAuxiliar[i][j].getValor() >= 1)) {
 					// Creamos Moneda
-					Moneda aux = new Moneda();
-					aux.setColumnaMoneda(j);
-					aux.setFilaMoneda(i);
-					aux.setValorMoneda(this.matrizAuxiliar[i][j].getValor());
+					Casilla aux = new Casilla();
+					aux.setColumna(j);
+					aux.setFila(i);
+					aux.setValor(this.matrizAuxiliar[i][j].getValor());
 					// Insertamos Moneda
 					listaMonedas.add(aux);
 				}
