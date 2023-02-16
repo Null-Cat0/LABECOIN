@@ -20,80 +20,98 @@ public class PrimeroMejor {
         contadorNodos = 0;
         actual.cargarHeuristicaMonedasv2();
 
-        System.out.println("Posicion  robot : "+actual.r.getFila() + " " + actual.r.getColumna());
-        System.out.println("MONEDA OBJETIVO: "+actual.mObjetivo.getFila()+" "+actual.mObjetivo.getColumna()+" " +actual.mObjetivo.getHeuristica());
-        for(int i=0; i< actual.listaMonedas.size();i++)
-        {
-            System.out.println("VALOR: "+actual.listaMonedas.get(i).getValor()+" FILA: "+actual.listaMonedas.get(i).getFila()+" COLUMNA: "+actual.listaMonedas.get(i).getColumna()+" HEURISTICA: "+actual.listaMonedas.get(i).heuristica);
-        }
-        System.out.println("MOVEMOS ROBOT HACIA LA IZQ");
-        actual.movimientoRobot("I");
-        System.out.println("Posicion  robot : "+actual.r.getFila() + " " + actual.r.getColumna());
-        actual.cargarHeuristicaMonedasv2();
-        System.out.println("MONEDA OBJETIVO: "+actual.mObjetivo.getFila()+" "+actual.mObjetivo.getColumna()+" " +actual.mObjetivo.getHeuristica());
-        for(int i=0; i< actual.listaMonedas.size();i++)
-        {
-            System.out.println("VALOR: "+actual.listaMonedas.get(i).getValor()+" FILA: "+actual.listaMonedas.get(i).getFila()+" COLUMNA: "+actual.listaMonedas.get(i).getColumna()+" HEURISTICA: "+actual.listaMonedas.get(i).heuristica);
-        }
-       
+        // System.out.println("Posicion robot : " + actual.r.getFila() + " " +
+        // actual.r.getColumna());
+        // System.out.println("MONEDA OBJETIVO: " + actual.mObjetivo.getFila() + " " +
+        // actual.mObjetivo.getColumna() + " "
+        // + actual.mObjetivo.getHeuristica());
+        // for (int i = 0; i < actual.listaMonedas.size(); i++) {
+        // System.out.println("VALOR: " + actual.listaMonedas.get(i).getValor() + "
+        // FILA: "
+        // + actual.listaMonedas.get(i).getFila() + " COLUMNA: " +
+        // actual.listaMonedas.get(i).getColumna()
+        // + " HEURISTICA: " + actual.listaMonedas.get(i).heuristica);
+        // }
+        // System.out.println("MOVEMOS ROBOT HACIA LA IZQ");
+        // actual.movimientoRobot("I");
+        // System.out.println("Posicion robot : " + actual.r.getFila() + " " +
+        // actual.r.getColumna());
+        // actual.cargarHeuristicaMonedasv2();
+        // System.out.println("MONEDA OBJETIVO: " + actual.mObjetivo.getFila() + " " +
+        // actual.mObjetivo.getColumna() + " "
+        // + actual.mObjetivo.getHeuristica());
+        // for (int i = 0; i < actual.listaMonedas.size(); i++) {
+        // System.out.println("VALOR: " + actual.listaMonedas.get(i).getValor() + "
+        // FILA: "
+        // + actual.listaMonedas.get(i).getFila() + " COLUMNA: " +
+        // actual.listaMonedas.get(i).getColumna()
+        // + " HEURISTICA: " + actual.listaMonedas.get(i).heuristica);
+        // }
+
     }
 
-    // public List<Tablero> generarSucesores(Tablero tab) {
-    //     List<String> posiblesMov = tab.obtenerPosiblesMov();
-    //     List<Tablero> hijos = new ArrayList<>();
-    //     boolean noMoves; // Usado para no realizar el movimiento dos veces en el caso de cargar la
-    //                      // heuristica
-    //     Tablero hijo;
-    //     for (int i = 0; i < posiblesMov.size(); i++) {
-    //         hijo = tab.copiarTablero();
-    //         contadorNodos++;
-    //         String mov = posiblesMov.get(i);
-    //         noMoves = false;
-    //         if (hijo.obtenerHeuristicaMov(mov) == 0) {
-    //             noMoves = true;
-    //             hijo.movimientoRobot(mov);
-    //             hijo.reducirCartera(hijo.mObjetivo.getValorMoneda());
-    //             // hijo.resetearHeuristica();
-    //             hijo.matriz[hijo.mObjetivo.getFilaMoneda()][hijo.mObjetivo.getColumnaMoneda()].setValor(0);// Eliminamos
-    //                                                                                                        // la moneda
-    //             hijo.listaMonedas.remove(hijo.mObjetivo);
-    //             hijo.cargarHeuristicaMonedas();
-    //         }
-    //         if (!noMoves)
-    //             hijo.movimientoRobot(mov);
+    public List<Tablero> generarSucesores(Tablero tab) {
+        List<String> posiblesMov = tab.obtenerPosiblesMov();
+        List<Tablero> hijos = new ArrayList<>();
+        boolean noMoves; // Usado para no realizar el movimiento dos veces en el caso de cargar la
+                         // heuristica
+        Tablero hijo;
+        for (int i = 0; i < posiblesMov.size(); i++) {
+            hijo = tab.copiarTablero();
+            // System.out.println("FILA: " + hijo.r.getFila() + " COLUMNA " +
+            // hijo.r.getColumna());
+            contadorNodos++;
+            String mov = posiblesMov.get(i);
+            noMoves = false;
+            if (hijo.obtenerHeuristicaMov(mov) < hijo.r.getHeuristica()) {
+                noMoves = true;
+                hijo.movimientoRobot(mov);
+                hijo.impresionMatrizVisual(hijo.getMatriz(), 10);
+                System.out.println();
+                if (hijo.obtenerHeuristicaMov(mov) == 0)
+                    hijo.resetearHeuristica();
 
-    //         hijos.add(hijo);
-    //     }
-    //     return hijos;
-    // }
+                if (hijo.getCartera() == 0) {
+                    hijo.cargarHeuristicaSalida();
+                } else {
+                    hijo.cargarHeuristicaMonedasv2();
+                }
+            }
 
-    // public void primeroMejor() {
+            hijos.add(hijo);
+        }
+        return hijos;
+    }
 
-    // abiertos.add(actual);
+    public void primeroMejor() {
 
-    // while (!abiertos.isEmpty() && contadorNodos < maxNodos) {
-    // abiertos.remove(0);
-    // cerrados.add(actual);
+        abiertos.add(actual);
 
-    // // Generamos los sucesores del tablero actual
-    // List<Tablero> hijos = generarSucesores(actual);
+        while (!abiertos.isEmpty() && contadorNodos < maxNodos) { // Mientras que no hayamos visto todos los nodos no
+                                                                  // explorados y mientras no hayamos explorado mas de x
+                                                                  // nodos.
+            abiertos.remove(0);
+            cerrados.add(actual);
 
-    // // Tratamos los repetidos
-    // tratarRepetidos(hijos);
+            // Generamos los sucesores del tablero actual
+            List<Tablero> hijos = generarSucesores(actual);
 
-    // // Insertamos los hijos en la lista de nodos abiertos
-    // for (int i = 0; i < hijos.size(); i++) {
-    // abiertos.add(hijos.get(i));
-    // }
+            // Tratamos los repetidos
+            tratarRepetidos(hijos);
 
-    // // Ordenamos la lista de abiertos
-    // // Collections.sort(abiertos, );
+            // Insertamos los hijos en la lista de nodos abiertos
+            for (int i = 0; i < hijos.size(); i++) {
+                abiertos.add(hijos.get(i));
+            }
 
-    // if (!abiertos.isEmpty()) {
-    // actual = abiertos.get(0);
-    // }
-    // }
-    // }
+            // Ordenamos la lista de abiertos
+            Collections.sort(abiertos, new ComparatorCartera());
+
+            if (!abiertos.isEmpty()) {
+                actual = abiertos.get(0);
+            }
+        }
+    }
 
     public void tratarRepetidos(List<Tablero> hijos) {
 
@@ -117,7 +135,8 @@ public class PrimeroMejor {
     public static void main(String[] args) {
         Datos_Iniciales d = new Datos_Iniciales("LABECOIN1.txt");
         PrimeroMejor m = new PrimeroMejor(d.getTablero());
-        // m.primeroMejor();
+        m.primeroMejor();
+        // m.generarSucesores(d.getTablero());
 
     }
 }

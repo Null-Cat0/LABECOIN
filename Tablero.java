@@ -36,44 +36,50 @@ public class Tablero {
 
 		int fila = this.r.getFila();
 		int columna = this.r.getColumna();
+
 		double valor;
 		switch (direccion) {
-		case "A":
-			valor = this.matriz[fila - 1][columna].getHeuristica();
-			break;
+			case "A":
+				valor = calcularHeuristicaPosiciones(fila - 1, columna, mObjetivo);
+				break;
 
-		case "B":
-			valor = this.matriz[fila + 1][columna].getHeuristica();
-			break;
+			case "B":
+				valor = calcularHeuristicaPosiciones(fila + 1, columna, mObjetivo);
+				break;
 
-		case "D":
-			valor = this.matriz[fila][columna + 1].getHeuristica();
-			break;
+			case "D":
+				valor = calcularHeuristicaPosiciones(fila, columna + 1, mObjetivo);
+				break;
 
-		case "I":
-			valor = this.matriz[fila][columna - 1].getHeuristica();
-			break;
+			case "I":
+				valor = calcularHeuristicaPosiciones(fila, columna - 1, mObjetivo);
+				break;
 
-		// Diagonales
-		case "AI":
-			valor = this.matriz[fila - 1][columna - 1].getHeuristica();
-			break;
+			// Diagonales
+			case "AI":
+				valor = calcularHeuristicaPosiciones(fila - 1, columna - 1, mObjetivo);
+				break;
 
-		case "AD":
-			valor = this.matriz[fila - 1][columna + 1].getHeuristica();
-			break;
+			case "AD":
+				valor = calcularHeuristicaPosiciones(fila - 1, columna + 1, mObjetivo);
+				break;
 
-		case "BD":
-			valor = this.matriz[fila + 1][columna + 1].getHeuristica();
-			break;
+			case "BD":
+				valor = calcularHeuristicaPosiciones(fila + 1, columna + 1, mObjetivo);
+				break;
 
-		case "BI":
-			valor = this.matriz[fila + 1][columna - 1].getHeuristica();
-			break;
+			case "BI":
+				valor = calcularHeuristicaPosiciones(fila + 1, columna - 1, mObjetivo);
+				break;
 
-		default:
-			valor = 0;
+			default:
+				valor = 0;
 		}
+
+		// System.out.println("FILA robot : "+fila+" COLUMNA robot :"+ columna +" FILA
+		// Moneda : "+mObjetivo.getFila()+" COLUMNA Moneda :"+ mObjetivo.getColumna() );
+		if ((fila == mObjetivo.getFila()) && (columna == mObjetivo.getColumna()))
+			valor = 0;
 		return valor;
 	}
 
@@ -116,63 +122,89 @@ public class Tablero {
 
 	void movimientoRobot(String direccion) {
 
+		int fila = this.r.getFila();
+		int columna = this.r.getColumna();
+
 		switch (direccion) {
-		case "A":
-			if (matriz[r.getFila() - 1][r.getColumna()].getValor() != 9) {
-				r.setFila(r.getFila() - 1);
-			}
-			break;
+			case "A":
+				if (matriz[fila - 1][columna].getValor() != 9) {
+					this.r.setFila(fila - 1);
+					this.matriz[fila][columna].setValor(0);
+					this.matriz[fila - 1][columna].setValor(8);
+				}
+				break;
 
-		case "B":
-			if (matriz[r.getFila() + 1][r.getColumna()].getValor() != 9) {
-				r.setFila(r.getFila() + 1);
-			}
-			break;
+			case "B":
+				if (matriz[fila + 1][columna].getValor() != 9) {
+					this.r.setFila(fila + 1);
 
-		case "D":
-			if (matriz[r.getFila()][r.getColumna() + 1].getValor() != 9) {
-				r.setColumna(r.getColumna() + 1);
-			}
-			break;
+					this.matriz[fila][columna].setValor(0);
+					this.matriz[fila + 1][columna].setValor(8);
+				}
+				break;
 
-		case "I":
-			if (matriz[r.getFila()][r.getColumna() - 1].getValor() != 9) {
-				r.setColumna(r.getColumna() - 1);
-			}
-			break;
+			case "D":
+				if (matriz[fila][columna + 1].getValor() != 9) {
+					this.r.setColumna(columna + 1);
 
-		// Diagonales
-		case "AI":
-			if (matriz[r.getFila() - 1][r.getColumna() - 1].getValor() != 9) {
+					this.matriz[fila][columna].setValor(0);
+					this.matriz[fila][columna + 1].setValor(8);
+				}
+				break;
 
-				r.setFila(r.getFila() - 1);
-				r.setColumna(r.getColumna() - 1);
-			}
-			break;
+			case "I":
+				if (matriz[fila][columna - 1].getValor() != 9) {
+					this.r.setColumna(columna - 1);
 
-		case "AD":
-			if (matriz[r.getFila() - 1][r.getColumna() + 1].getValor() != 9) {
-				r.setFila(r.getFila() - 1);
-				r.setColumna(r.getColumna() + 1);
-			}
-			break;
+					this.matriz[fila][columna].setValor(0);
+					this.matriz[fila][columna - 1].setValor(8);
+				}
+				break;
 
-		case "BD":
-			if (matriz[r.getFila() + 1][r.getColumna() + 1].getValor() != 9) {
-				r.setFila(r.getFila() + 1);
-				r.setColumna(r.getColumna() + 1);
-			}
-			break;
+			// Diagonales
+			case "AI":
+				if (matriz[fila - 1][columna - 1].getValor() != 9) {
 
-		case "BI":
-			if (matriz[r.getFila() + 1][r.getColumna() - 1].getValor() != 9) {
-				r.setFila(r.getFila() + 1);
-				r.setColumna(r.getColumna() - 1);
-			}
-			break;
+					this.r.setFila(fila - 1);
+					this.r.setColumna(columna - 1);
 
-		default:
-			return;
+					this.matriz[fila][columna].setValor(0);
+					this.matriz[fila - 1][columna - 1].setValor(8);
+				}
+				break;
+
+			case "AD":
+				if (matriz[fila - 1][columna + 1].getValor() != 9) {
+					this.r.setFila(fila - 1);
+					this.r.setColumna(columna + 1);
+
+					this.matriz[fila][columna].setValor(0);
+					this.matriz[fila - 1][columna + 1].setValor(8);
+				}
+				break;
+
+			case "BD":
+				if (matriz[fila + 1][columna + 1].getValor() != 9) {
+					this.r.setFila(fila + 1);
+					this.r.setColumna(columna + 1);
+
+					this.matriz[fila][columna].setValor(0);
+					this.matriz[fila + 1][columna + 1].setValor(8);
+				}
+				break;
+
+			case "BI":
+				if (matriz[fila + 1][columna - 1].getValor() != 9) {
+					this.r.setFila(fila + 1);
+					this.r.setColumna(columna - 1);
+
+					this.matriz[fila][columna].setValor(0);
+					this.matriz[fila + 1][columna - 1].setValor(8);
+				}
+				break;
+
+			default:
+				return;
 		}
 	}
 
@@ -186,6 +218,16 @@ public class Tablero {
 
 	public double calcularHeuristica(Casilla r, Casilla m) {
 		return (calcularDistancia(r, m) * 1) + (m.getValor()) * 0.25;
+	}
+
+	private double calcularDistanciaPosiciones(int f, int c, Casilla m) {
+		int filaMoneda = m.getFila();
+		int columnaMoneda = m.getColumna();
+		return (Math.sqrt(Math.pow(columnaMoneda - c, 2) + Math.pow(filaMoneda - f, 2)));
+	}
+
+	public double calcularHeuristicaPosiciones(int f, int c, Casilla m) {
+		return (calcularDistanciaPosiciones(f, c, m) * 1) + (m.getValor()) * 0.25;
 	}
 
 	public Casilla[][] getMatriz() {
@@ -211,13 +253,14 @@ public class Tablero {
 		tab.cartera = this.cartera;
 		tab.listaMonedas = new ArrayList<>(this.listaMonedas);
 		tab.lastMov = this.lastMov;
+		tab.mObjetivo = this.mObjetivo;
 		return tab;
 	}
 
 	public void mostrarMatriz() {
 		for (int i = 0; i < N; i++) {
 			for (int j = 0; j < N; j++) {
-				System.out.print(this.matriz[i][j] + " ");
+				System.out.print(this.matriz[i][j].getValor() + " ");
 			}
 			System.out.println();
 		}
@@ -227,7 +270,8 @@ public class Tablero {
 
 		for (int j = 0; j < N; j++) {
 			System.out.print("Fila moneda: " + listaMonedas.get(j).getFila() + " Columna moneda: "
-					+ listaMonedas.get(j).getColumna() + " Valor moneda: " + listaMonedas.get(j).getValor());
+					+ listaMonedas.get(j).getColumna() + " Valor moneda: " + listaMonedas.get(j).getValor()
+					+ " Heuristica: " + listaMonedas.get(j).getHeuristica());
 			System.out.println();
 		}
 
@@ -269,10 +313,52 @@ public class Tablero {
 		if (mObjetivo == null) {
 			mObjetivo = mejorM;
 			listaMonedas.remove(mObjetivo);
+			this.r.setHeuristica(mObjetivo.getHeuristica());
 			Collections.sort(listaMonedas, new ComparatorHeuristica());
 		}
 		// System.out.print("MEJOR: "+mejor+ mejorM.getFilaMoneda()+"
 		// "+mejorM.getColumnaMoneda());
+	}
+
+	public void resetearHeuristica() {
+		this.r.setHeuristica(0);
+		this.mObjetivo = null;
+	}
+    public void impresionMatrizVisual(Casilla[][] Matriz, int N) {
+        String x;
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < N; j++) {
+                switch (Matriz[i][j].getValor()) {
+                    case 0:
+                        x = " . ";
+                        break;
+                    case 1:
+                    case 2:
+                    case 3:
+                    case 4:
+                    case 5:
+                    case 6:
+                        x = " " + Matriz[i][j].getValor() + " ";
+                        break;
+                    case 7:
+                        x = " S ";
+                        break;
+                    case 8:
+                        x = " @ ";
+                        break;
+                    case 9:
+                        x = " # ";
+                        break;
+                    default:
+                        return;
+                }
+                System.out.print(x);
+            }
+            System.out.println();
+        }
+    }
+	public void cargarHeuristicaSalida() {
+
 	}
 
 	@Override
