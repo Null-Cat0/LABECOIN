@@ -62,20 +62,40 @@ public class PrimeroMejor {
             // hijo.r.getColumna());
             contadorNodos++;
             String mov = posiblesMov.get(i);
+
+            System.out.println();
             noMoves = false;
-            if (hijo.obtenerHeuristicaMov(mov) < hijo.r.getHeuristica()) {
+            
+
+            if (hijo.obtenerHeuristicaMov(mov) < hijo.r.getHeuristica() && hijo.sepuedeMov(mov)) {
+                
+                System.out.println("--- "+hijo.r.getHeuristica());
+                System.out.println("---> "+hijo.obtenerHeuristicaMov(mov));
+                
+                hijo.r.setHeuristica(hijo.obtenerHeuristicaMov(mov));
                 noMoves = true;
                 hijo.movimientoRobot(mov);
+                
+                System.out.println(mov);
                 hijo.impresionMatrizVisual(hijo.getMatriz(), 10);
+                hijo.mostrarListaMonedas();
                 System.out.println();
-                if (hijo.obtenerHeuristicaMov(mov) == 0)
+                
+                if (hijo.obtenerHeuristicaMov(mov) == 0) {
                     hijo.resetearHeuristica();
-
-                if (hijo.getCartera() == 0) {
-                    hijo.cargarHeuristicaSalida();
-                } else {
                     hijo.cargarHeuristicaMonedasv2();
+
+                    if (hijo.getCartera() == 0) {
+                        hijo.cargarHeuristicaSalida();
+                    } else {
+                        // hijo.cargarHeuristicaMonedasv2();
+                    }
+                    // System.out.println("CARTERA ACTUAL: "+hijo.getCartera()+" Fila siguiente
+                    // moneda: "+hijo.mObjetivo.getFila()+" Columna siguiente moneda:
+                    // "+hijo.mObjetivo.getColumna());
+                    // break;
                 }
+
             }
 
             hijos.add(hijo);
@@ -86,10 +106,10 @@ public class PrimeroMejor {
     public void primeroMejor() {
 
         abiertos.add(actual);
-
+        int cont = 0;
         while (!abiertos.isEmpty() && contadorNodos < maxNodos) { // Mientras que no hayamos visto todos los nodos no
                                                                   // explorados y mientras no hayamos explorado mas de x
-                                                                  // nodos.
+                                                                     // nodos.
             abiertos.remove(0);
             cerrados.add(actual);
 

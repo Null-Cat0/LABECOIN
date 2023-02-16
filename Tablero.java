@@ -22,6 +22,7 @@ public class Tablero {
 		matriz = _matriz;
 		cartera = _cartera;
 		this.N = _N;
+		lastMov = " ";
 	}
 
 	Tablero(int _N) {
@@ -30,6 +31,7 @@ public class Tablero {
 		matriz = new Casilla[_N][_N];
 		cartera = 0;
 		this.N = _N;
+		lastMov = " ";
 	}
 
 	public Double obtenerHeuristicaMov(String direccion) {
@@ -84,7 +86,7 @@ public class Tablero {
 	}
 
 	public boolean posicionLibre(int i, int j) {
-		return matriz[i][j].getValor() != 9;
+		return this.matriz[i][j].getValor() != 9;
 	}
 
 	public List<String> obtenerPosiblesMov() {
@@ -93,33 +95,77 @@ public class Tablero {
 		int fila = this.r.getFila();
 		int columna = this.r.getColumna();
 
-		if (posicionLibre(fila - 1, columna) /* && !this.lastMov.equals("B") */)
+		if (posicionLibre(fila - 1, columna) && !this.lastMov.equals("B") )
 			posiblesMov.add("A");
 
-		if (posicionLibre(fila + 1, columna) /* && !this.lastMov.equals("A") */)
+		if (posicionLibre(fila + 1, columna)  && !this.lastMov.equals("A") )
 			posiblesMov.add("B");
 
-		if (posicionLibre(fila, columna - 1) /* && !this.lastMov.equals("D") */)
+		if (posicionLibre(fila, columna - 1) && !this.lastMov.equals("D"))
 			posiblesMov.add("I");
 
-		if (posicionLibre(fila, columna + 1)/* && !this.lastMov.equals("I") */)
+		if (posicionLibre(fila, columna + 1) && !this.lastMov.equals("I") )
 			posiblesMov.add("D");
 
-		if (posicionLibre(fila - 1, columna - 1) /* && !this.lastMov.equals("BD") */)
+		if (posicionLibre(fila - 1, columna - 1)  && !this.lastMov.equals("BD") )
 			posiblesMov.add("AI");
 
-		if (posicionLibre(fila - 1, columna + 1)/* && !this.lastMov.equals("BI") */)
+		if (posicionLibre(fila - 1, columna + 1) && !this.lastMov.equals("BI") )
 			posiblesMov.add("AD");
 
-		if (posicionLibre(fila + 1, columna + 1)/* && !this.lastMov.equals("AD") */)
+		if (posicionLibre(fila + 1, columna + 1) && !this.lastMov.equals("AI") )
 			posiblesMov.add("BD");
 
-		if (posicionLibre(fila + 1, columna - 1)/* && !this.lastMov.equals("AI") */)
+		if (posicionLibre(fila + 1, columna - 1) && !this.lastMov.equals("AD") )
 			posiblesMov.add("BI");
 
 		return posiblesMov;
 	}
+	boolean sepuedeMov(String mov)
+	{
+	
+		int fila = this.r.getFila();
+		int columna = this.r.getColumna();
+		boolean posible ;
+		switch (mov) {
+			case "A":
+				posible = posicionLibre(fila - 1, columna) ;
+				break;
 
+			case "B":
+			posible = posicionLibre(fila + 1, columna) ;
+				break;
+
+			case "D":
+			posible = posicionLibre(fila, columna + 1)  ;
+				break;
+
+			case "I":
+			posible =posicionLibre(fila, columna - 1) ;
+				break;
+
+			// Diagonales
+			case "AI":
+			posible = posicionLibre(fila - 1, columna - 1);
+				break;
+
+			case "AD":
+			posible =posicionLibre(fila - 1, columna + 1)    ;
+				break;
+
+			case "BD":
+			posible =posicionLibre(fila + 1, columna + 1) ;
+				break;
+
+			case "BI":
+			posible = posicionLibre(fila + 1, columna - 1);
+				break;
+
+			default:
+			posible = false;
+		}
+		return posible;
+	}
 	void movimientoRobot(String direccion) {
 
 		int fila = this.r.getFila();
@@ -128,36 +174,44 @@ public class Tablero {
 		switch (direccion) {
 			case "A":
 				if (matriz[fila - 1][columna].getValor() != 9) {
+					
 					this.r.setFila(fila - 1);
 					this.matriz[fila][columna].setValor(0);
 					this.matriz[fila - 1][columna].setValor(8);
+					this.lastMov = "A";
 				}
 				break;
 
 			case "B":
 				if (matriz[fila + 1][columna].getValor() != 9) {
+					
 					this.r.setFila(fila + 1);
 
 					this.matriz[fila][columna].setValor(0);
 					this.matriz[fila + 1][columna].setValor(8);
+					this.lastMov = "B";
 				}
 				break;
 
 			case "D":
 				if (matriz[fila][columna + 1].getValor() != 9) {
+					
 					this.r.setColumna(columna + 1);
 
 					this.matriz[fila][columna].setValor(0);
 					this.matriz[fila][columna + 1].setValor(8);
+					this.lastMov = "D";
 				}
 				break;
 
 			case "I":
 				if (matriz[fila][columna - 1].getValor() != 9) {
+					
 					this.r.setColumna(columna - 1);
 
 					this.matriz[fila][columna].setValor(0);
 					this.matriz[fila][columna - 1].setValor(8);
+					this.lastMov = "I";
 				}
 				break;
 
@@ -170,6 +224,7 @@ public class Tablero {
 
 					this.matriz[fila][columna].setValor(0);
 					this.matriz[fila - 1][columna - 1].setValor(8);
+					this.lastMov = "AI";
 				}
 				break;
 
@@ -180,6 +235,7 @@ public class Tablero {
 
 					this.matriz[fila][columna].setValor(0);
 					this.matriz[fila - 1][columna + 1].setValor(8);
+					this.lastMov = "AD";
 				}
 				break;
 
@@ -190,6 +246,7 @@ public class Tablero {
 
 					this.matriz[fila][columna].setValor(0);
 					this.matriz[fila + 1][columna + 1].setValor(8);
+					this.lastMov = "BD";
 				}
 				break;
 
@@ -200,6 +257,7 @@ public class Tablero {
 
 					this.matriz[fila][columna].setValor(0);
 					this.matriz[fila + 1][columna - 1].setValor(8);
+					this.lastMov = "BI";
 				}
 				break;
 
@@ -249,9 +307,11 @@ public class Tablero {
 				tab.matriz[i][j] = this.matriz[i][j];
 			}
 		}
+		
 		tab.r = this.r;
 		tab.cartera = this.cartera;
-		tab.listaMonedas = new ArrayList<>(this.listaMonedas);
+		tab.listaMonedas = new ArrayList<>();
+		tab.listaMonedas.addAll(this.listaMonedas);
 		tab.lastMov = this.lastMov;
 		tab.mObjetivo = this.mObjetivo;
 		return tab;
@@ -268,7 +328,7 @@ public class Tablero {
 
 	public void mostrarListaMonedas() {
 
-		for (int j = 0; j < N; j++) {
+		for (int j = 0; j < listaMonedas.size(); j++) {
 			System.out.print("Fila moneda: " + listaMonedas.get(j).getFila() + " Columna moneda: "
 					+ listaMonedas.get(j).getColumna() + " Valor moneda: " + listaMonedas.get(j).getValor()
 					+ " Heuristica: " + listaMonedas.get(j).getHeuristica());
@@ -311,16 +371,17 @@ public class Tablero {
 			}
 		}
 		if (mObjetivo == null) {
-			mObjetivo = mejorM;
-			listaMonedas.remove(mObjetivo);
+			this.mObjetivo = new Casilla(mejorM.getFila(), mejorM.getColumna(),mejorM.getValor(), mejorM.getHeuristica());
+			Collections.sort(listaMonedas, new ComparatorMonedas());
+			this.listaMonedas.remove(0);
 			this.r.setHeuristica(mObjetivo.getHeuristica());
-			Collections.sort(listaMonedas, new ComparatorHeuristica());
 		}
 		// System.out.print("MEJOR: "+mejor+ mejorM.getFilaMoneda()+"
 		// "+mejorM.getColumnaMoneda());
 	}
 
 	public void resetearHeuristica() {
+		this.cartera = this.getCartera() - this.mObjetivo.getValor();
 		this.r.setHeuristica(0);
 		this.mObjetivo = null;
 	}
@@ -370,9 +431,9 @@ public class Tablero {
 		if (getClass() != obj.getClass())
 			return false;
 		Tablero other = (Tablero) obj;
-		return N == other.N && Objects.equals(listaMonedas, other.listaMonedas)
+		return N == other.N && Objects.deepEquals(listaMonedas, other.listaMonedas)
 				&& Objects.equals(lastMov, other.lastMov) && Arrays.deepEquals(matriz, other.matriz)
-				&& cartera == other.cartera && Objects.equals(r, other.r);
+				&& cartera == other.cartera && Objects.equals(r, other.r)&& Objects.equals(mObjetivo, other.mObjetivo);
 	}
 	// public static void main(String[] args) {
 	// Datos_Iniciales d = new Datos_Iniciales("LABECOIN1.txt");
