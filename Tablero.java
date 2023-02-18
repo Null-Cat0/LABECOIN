@@ -5,35 +5,149 @@ import java.util.List;
 import java.util.Objects;
 
 public class Tablero {
-	Casilla r;
-	List<Casilla> listaMonedas;
-	Casilla mObjetivo = null;
-	Casilla[][] matriz;
-	int cartera;
-	String lastMov;
-	int N;
-
-	Tablero(List<Casilla> _listaMonedas, int filaRobot, int columnaRobot, Casilla[][] _matriz, int _cartera, int _N) {
-		r = new Casilla();
-		r.setColumna(filaRobot);
-		r.setFila(columnaRobot);
-		listaMonedas = new ArrayList<>();
-		listaMonedas = _listaMonedas;
-		matriz = _matriz;
-		cartera = _cartera;
+	private Casilla r;
+	private Casilla mObjetivo;
+	public Casilla[][] matriz;
+	private List<Casilla> listaMonedas;
+	private int cartera;
+	private int N;
+	private int numeroMonedas;
+	private String lastMov;
+	private Tablero ultTablero;
+	
+	Tablero(List<Casilla> _listaMonedas, int filaRobot, int columnaRobot, Casilla[][] _matriz, int _cartera, int _N, Tablero ultTablero) {
+		this.r = new Casilla();
+		this.r.setColumna(filaRobot);
+		this.r.setFila(columnaRobot);
+		this.listaMonedas = new ArrayList<>();
+		this.listaMonedas = _listaMonedas;
+		this.matriz = _matriz;
+		this.cartera = _cartera;
 		this.N = _N;
-		lastMov = " ";
+		this.lastMov = " ";
+		this.ultTablero = ultTablero;
+		this.mObjetivo = null;
 	}
-
 	Tablero(int _N) {
-		r = new Casilla();
-		listaMonedas = new ArrayList<>();
-		matriz = new Casilla[_N][_N];
-		cartera = 0;
+		this.r = new Casilla();
+		this.listaMonedas = new ArrayList<>();
+		this.matriz = new Casilla[_N][_N];
+		this.cartera = 0;
 		this.N = _N;
-		lastMov = " ";
+		this.lastMov = " ";
+		this.mObjetivo = null;
+		this.ultTablero = null;
+	}
+	
+	/*
+	 * SET Y GET
+	 * 
+	 */
+	
+	
+	public Casilla getRobot() {
+		return this.r;
+	}
+	public Casilla getmObjetivo() {
+		return this.mObjetivo;
+	}
+	public Casilla[][] getMatriz() {
+		return this.matriz;
+	}
+	public List<Casilla> getListaMonedas() {
+		return this.listaMonedas;
+	}
+	public int getCartera() {
+		return this.cartera;
+	}
+	public int getN() {
+		return this.N;
+	}
+	public String getLastMov() {
+		return this.lastMov;
+	}
+	public Tablero getLastTablero() {
+		return this.ultTablero;
+	}
+	
+	public void setRobot(Casilla r) {
+		 this.r = r;
+	}
+	public void setmObjetivo(Casilla mObjetivo) {
+		 this.mObjetivo = mObjetivo;
+	}
+	public void setMatriz(Casilla[][] matriz) {
+		 this.matriz = matriz;
+	}
+	public void setListaMonedas(List<Casilla> l) {
+		 this.listaMonedas = l;
+	}
+	public void setCartera(int x) {
+		 this.cartera = x;
+	}
+	public void setN(int N) {
+		 this.N =  N;
+	}
+	public void setLastMov(String x) {
+		 this.lastMov = x;
+	}
+	public void setLastTablero(Tablero x) {
+		 this.ultTablero = x;
+	}
+	
+	public int getNumeroMonedas() {
+		return numeroMonedas;
 	}
 
+	public void setNumeroMonedas(int numeroMonedas) {
+		this.numeroMonedas = numeroMonedas;
+	}
+	public double getHeuristicaTablero() 
+	{
+		return this.r.getHeuristica();
+	}
+	
+	/*
+	 * 
+	 * BUSQUEDA DE ROBOT, MONEDAS....
+	 * 
+	 * 
+	 * */
+	public void encontrarMonedas() {
+		for (int i = 0; i < this.N; i++) {
+			for (int j = 0; j < this.N; j++) {
+				if ((this.matriz[i][j].getValor() <= 6) && (this.matriz[i][j].getValor() >= 1)) {
+					// Creamos Moneda
+					Casilla aux = new Casilla(i,j,this.matriz[i][j].getValor(),100);
+					// Insertamos Moneda
+					listaMonedas.add(aux);
+					this.setNumeroMonedas(this.getNumeroMonedas()+1);
+				}
+
+			}
+		}
+	}
+	public void encontrarRobot() {
+		for (int i = 0; i < this.N; i++) {
+			for (int j = 0; j < this.N; j++) {
+				if (this.matriz[i][j].getValor() == 8)
+					this.r = new Casilla(i,j,8,0) ;
+			}
+		}
+		
+	}
+	
+	/*
+	 * 
+	 * M�TODOS DE LA CLASE
+	 * 
+	 */
+	
+	//Devuelve si la posicion i , j de la matriz es un muro 
+	public boolean posicionLibre(int i, int j) {
+		return this.matriz[i][j].getValor() != 9;
+	}
+	
 	public Double obtenerHeuristicaMov(String direccion) {
 
 		int fila = this.r.getFila();
@@ -42,36 +156,44 @@ public class Tablero {
 		double valor;
 		switch (direccion) {
 			case "A":
-				valor = calcularHeuristicaPosiciones(fila - 1, columna, mObjetivo);
+				valor = this.matriz[fila - 1][columna].getHeuristica();
+				//valor = calcularHeuristicaPosiciones(fila - 1, columna, mObjetivo);
 				break;
 
 			case "B":
-				valor = calcularHeuristicaPosiciones(fila + 1, columna, mObjetivo);
+				valor = this.matriz[fila + 1][columna].getHeuristica();
+				//valor = calcularHeuristicaPosiciones(fila + 1, columna, mObjetivo);
 				break;
 
 			case "D":
-				valor = calcularHeuristicaPosiciones(fila, columna + 1, mObjetivo);
+				valor = this.matriz[fila ][columna+ 1].getHeuristica();
+				//valor = calcularHeuristicaPosiciones(fila, columna + 1, mObjetivo);
 				break;
 
 			case "I":
-				valor = calcularHeuristicaPosiciones(fila, columna - 1, mObjetivo);
+				valor = this.matriz[fila ][columna- 1].getHeuristica();
+				//valor = calcularHeuristicaPosiciones(fila, columna - 1, mObjetivo);
 				break;
 
 			// Diagonales
 			case "AI":
-				valor = calcularHeuristicaPosiciones(fila - 1, columna - 1, mObjetivo);
+				valor = this.matriz[fila -1][columna- 1].getHeuristica();
+				//valor = calcularHeuristicaPosiciones(fila - 1, columna - 1, mObjetivo);
 				break;
 
 			case "AD":
-				valor = calcularHeuristicaPosiciones(fila - 1, columna + 1, mObjetivo);
+				valor = this.matriz[fila -1][columna+ 1].getHeuristica();
+				//valor = calcularHeuristicaPosiciones(fila - 1, columna + 1, mObjetivo);
 				break;
 
 			case "BD":
-				valor = calcularHeuristicaPosiciones(fila + 1, columna + 1, mObjetivo);
+				valor = this.matriz[fila +1][columna+ 1].getHeuristica();
+				//valor = calcularHeuristicaPosiciones(fila + 1, columna + 1, mObjetivo);
 				break;
 
 			case "BI":
-				valor = calcularHeuristicaPosiciones(fila + 1, columna - 1, mObjetivo);
+				valor = this.matriz[fila +1][columna- 1].getHeuristica();
+				//valor = calcularHeuristicaPosiciones(fila + 1, columna - 1, mObjetivo);
 				break;
 
 			default:
@@ -80,92 +202,48 @@ public class Tablero {
 
 		// System.out.println("FILA robot : "+fila+" COLUMNA robot :"+ columna +" FILA
 		// Moneda : "+mObjetivo.getFila()+" COLUMNA Moneda :"+ mObjetivo.getColumna() );
-		if ((fila == mObjetivo.getFila()) && (columna == mObjetivo.getColumna()))
-			valor = 0;
+//		if ((fila == mObjetivo.getFila()) && (columna == mObjetivo.getColumna()))
+//			valor = 0;
 		return valor;
 	}
-
-	public boolean posicionLibre(int i, int j) {
-		return this.matriz[i][j].getValor() != 9;
-	}
-
+	
+	
+	
+	//Devuelve la lista de movimientos que puede realizar el robot.
 	public List<String> obtenerPosiblesMov() {
 		List<String> posiblesMov = new ArrayList<>();
 
 		int fila = this.r.getFila();
 		int columna = this.r.getColumna();
-
-		if (posicionLibre(fila - 1, columna) && !this.lastMov.equals("B") )
+		if(fila < 9 && columna < 9) {
+		if (posicionLibre(fila - 1, columna) /*&& !this.lastMov.equals("B")*/ )
 			posiblesMov.add("A");
 
-		if (posicionLibre(fila + 1, columna)  && !this.lastMov.equals("A") )
+		if (posicionLibre(fila + 1, columna) /* && !this.lastMov.equals("A")*/ )
 			posiblesMov.add("B");
 
-		if (posicionLibre(fila, columna - 1) && !this.lastMov.equals("D"))
+		if (posicionLibre(fila, columna - 1) /* && !this.lastMov.equals("D")*/)
 			posiblesMov.add("I");
 
-		if (posicionLibre(fila, columna + 1) && !this.lastMov.equals("I") )
+		if (posicionLibre(fila, columna + 1)  /*&& !this.lastMov.equals("I") */)
 			posiblesMov.add("D");
 
-		if (posicionLibre(fila - 1, columna - 1)  && !this.lastMov.equals("BD") )
+		if (posicionLibre(fila - 1, columna - 1)  /* && !this.lastMov.equals("BD")*/ )
 			posiblesMov.add("AI");
 
-		if (posicionLibre(fila - 1, columna + 1) && !this.lastMov.equals("BI") )
+		if (posicionLibre(fila - 1, columna + 1)/* && !this.lastMov.equals("BI") */)
 			posiblesMov.add("AD");
 
-		if (posicionLibre(fila + 1, columna + 1) && !this.lastMov.equals("AI") )
+		if (posicionLibre(fila + 1, columna + 1) /* && !this.lastMov.equals("AI") */)
 			posiblesMov.add("BD");
 
-		if (posicionLibre(fila + 1, columna - 1) && !this.lastMov.equals("AD") )
+		if (posicionLibre(fila + 1, columna - 1) /* && !this.lastMov.equals("AD") */)
 			posiblesMov.add("BI");
-
+		}
 		return posiblesMov;
 	}
-	boolean sepuedeMov(String mov)
-	{
 	
-		int fila = this.r.getFila();
-		int columna = this.r.getColumna();
-		boolean posible ;
-		switch (mov) {
-			case "A":
-				posible = posicionLibre(fila - 1, columna) ;
-				break;
-
-			case "B":
-			posible = posicionLibre(fila + 1, columna) ;
-				break;
-
-			case "D":
-			posible = posicionLibre(fila, columna + 1)  ;
-				break;
-
-			case "I":
-			posible =posicionLibre(fila, columna - 1) ;
-				break;
-
-			// Diagonales
-			case "AI":
-			posible = posicionLibre(fila - 1, columna - 1);
-				break;
-
-			case "AD":
-			posible =posicionLibre(fila - 1, columna + 1)    ;
-				break;
-
-			case "BD":
-			posible =posicionLibre(fila + 1, columna + 1) ;
-				break;
-
-			case "BI":
-			posible = posicionLibre(fila + 1, columna - 1);
-				break;
-
-			default:
-			posible = false;
-		}
-		return posible;
-	}
+	//Mueve el robot en la direcci�n indicada en "direccion" (Si es posible)
 	void movimientoRobot(String direccion) {
 
 		int fila = this.r.getFila();
@@ -173,7 +251,7 @@ public class Tablero {
 
 		switch (direccion) {
 			case "A":
-				if (matriz[fila - 1][columna].getValor() != 9) {
+				if (posicionLibre(fila - 1, columna)) {
 					
 					this.r.setFila(fila - 1);
 					this.matriz[fila][columna].setValor(0);
@@ -183,7 +261,8 @@ public class Tablero {
 				break;
 
 			case "B":
-				if (matriz[fila + 1][columna].getValor() != 9) {
+				
+				if (posicionLibre(fila + 1, columna)) {
 					
 					this.r.setFila(fila + 1);
 
@@ -194,7 +273,7 @@ public class Tablero {
 				break;
 
 			case "D":
-				if (matriz[fila][columna + 1].getValor() != 9) {
+				if (posicionLibre(fila, columna + 1)) {
 					
 					this.r.setColumna(columna + 1);
 
@@ -205,7 +284,7 @@ public class Tablero {
 				break;
 
 			case "I":
-				if (matriz[fila][columna - 1].getValor() != 9) {
+				if (posicionLibre(fila, columna - 1)) {
 					
 					this.r.setColumna(columna - 1);
 
@@ -217,7 +296,7 @@ public class Tablero {
 
 			// Diagonales
 			case "AI":
-				if (matriz[fila - 1][columna - 1].getValor() != 9) {
+				if (posicionLibre(fila - 1, columna - 1)) {
 
 					this.r.setFila(fila - 1);
 					this.r.setColumna(columna - 1);
@@ -229,7 +308,7 @@ public class Tablero {
 				break;
 
 			case "AD":
-				if (matriz[fila - 1][columna + 1].getValor() != 9) {
+				if (posicionLibre(fila - 1, columna + 1)) {
 					this.r.setFila(fila - 1);
 					this.r.setColumna(columna + 1);
 
@@ -240,7 +319,7 @@ public class Tablero {
 				break;
 
 			case "BD":
-				if (matriz[fila + 1][columna + 1].getValor() != 9) {
+				if (posicionLibre(fila + 1, columna + 1)) {
 					this.r.setFila(fila + 1);
 					this.r.setColumna(columna + 1);
 
@@ -251,7 +330,7 @@ public class Tablero {
 				break;
 
 			case "BI":
-				if (matriz[fila + 1][columna - 1].getValor() != 9) {
+				if (posicionLibre(fila + 1, columna - 1) ) {
 					this.r.setFila(fila + 1);
 					this.r.setColumna(columna - 1);
 
@@ -260,72 +339,58 @@ public class Tablero {
 					this.lastMov = "BI";
 				}
 				break;
-
-			default:
-				return;
 		}
 	}
-
-	private double calcularDistancia(Casilla r, Casilla m) {
-		int filaRobot = r.getFila();
-		int columnaRobot = r.getColumna();
-		int filaMoneda = m.getFila();
-		int columnaMoneda = m.getColumna();
-		return (Math.sqrt(Math.pow(columnaMoneda - columnaRobot, 2) + Math.pow(filaMoneda - filaRobot, 2)));
-	}
-
-	public double calcularHeuristica(Casilla r, Casilla m) {
-		return (calcularDistancia(r, m) * 1) + (m.getValor()) * 0.25;
-	}
-
+	
+	//Calcula la distancia entre una casilla y una fila y columna
 	private double calcularDistanciaPosiciones(int f, int c, Casilla m) {
 		int filaMoneda = m.getFila();
 		int columnaMoneda = m.getColumna();
 		return (Math.sqrt(Math.pow(columnaMoneda - c, 2) + Math.pow(filaMoneda - f, 2)));
 	}
-
+	
+	//Calcula la distancia entre dos casillas
+	private double calcularDistancia(Casilla r, Casilla m) {
+		int filaRobot = r.getFila();
+		int columnaRobot = r.getColumna();
+		int filaMoneda = m.getFila();
+		int columnaMoneda = m.getColumna();
+		return Math.round(Math.sqrt(Math.pow(columnaMoneda - columnaRobot, 2) + Math.pow(filaMoneda - filaRobot, 2))*100.0)/100.0;
+		//return (Math.sqrt(Math.pow(columnaMoneda - columnaRobot, 2) + Math.pow(filaMoneda - filaRobot, 2)));
+	}
+	
+	//Obtiene la heuristica entre dos casillas
+	public double calcularHeuristica(Casilla r, Casilla m) {
+		return (calcularDistancia(r, m) * 1) + (m.getValor()) * 0.25;
+	}
+	
+	//Obtiene la heuristica entre una posicion y una casilla
 	public double calcularHeuristicaPosiciones(int f, int c, Casilla m) {
 		return (calcularDistanciaPosiciones(f, c, m) * 1) + (m.getValor()) * 0.25;
 	}
-
-	public Casilla[][] getMatriz() {
-		return this.matriz;
-	}
-
-	public int getCartera() {
-		return this.cartera;
-	}
-
-	public void reducirCartera(int valor) {
-		this.cartera -= valor;
-	}
-
+	
+	//Copia un tablero en otro.
 	public Tablero copiarTablero() {
 		Tablero tab = new Tablero(N);
 		for (int i = 0; i < N; i++) {
 			for (int j = 0; j < N; j++) {
-				tab.matriz[i][j] = this.matriz[i][j];
+				tab.matriz[i][j] = new Casilla(this.matriz[i][j].getFila(),this.matriz[i][j].getColumna(),this.matriz[i][j].getValor(), this.matriz[i][j].getHeuristica());
 			}
 		}
 		
-		tab.r = this.r;
+		tab.r = new Casilla(this.r.getFila(),this.r.getColumna(),
+				this.r.getValor(), this.r.getHeuristica());
 		tab.cartera = this.cartera;
-		tab.listaMonedas = new ArrayList<>();
-		tab.listaMonedas.addAll(this.listaMonedas);
+		tab.listaMonedas = new ArrayList<>(this.listaMonedas);
 		tab.lastMov = this.lastMov;
-		tab.mObjetivo = this.mObjetivo;
+		if(this.mObjetivo != null)
+		tab.mObjetivo = new Casilla(this.mObjetivo.getFila(),this.mObjetivo.getColumna(),this.mObjetivo.getValor(),this.mObjetivo.getHeuristica());
+		tab.numeroMonedas = this.numeroMonedas;
+		tab.setLastTablero(this);
 		return tab;
 	}
 
-	public void mostrarMatriz() {
-		for (int i = 0; i < N; i++) {
-			for (int j = 0; j < N; j++) {
-				System.out.print(this.matriz[i][j].getValor() + " ");
-			}
-			System.out.println();
-		}
-	}
-
+	//Muestra por consola las monedas con sus valores correspondientes.
 	public void mostrarListaMonedas() {
 
 		for (int j = 0; j < listaMonedas.size(); j++) {
@@ -336,29 +401,30 @@ public class Tablero {
 		}
 
 	}
-
-	public void cargarHeuristicaMonedas() {
-		double haux;
-		for (int h = 0; h < listaMonedas.size(); h++) {
+	
+	//Carga la heuristica de la matriz completa
+	public void cargarHeuristicaMonedasTodaMatriz() {
+		double distancia;
+		for (int k = 0; k < listaMonedas.size(); k++) {
 			for (int i = 0; i < N; i++) {
 				for (int j = 0; j < N; j++) {
-					if (this.matriz[i][j].getValor() != 9) {
-						Casilla aux = listaMonedas.get(h);
-						haux = this.calcularHeuristica(r, aux);
-						if (haux < this.matriz[i][j].getHeuristica()) {
-							this.matriz[i][j].setHeuristica(haux);
+					if (posicionLibre(i, j)) {
+						distancia = this.calcularDistancia(this.listaMonedas.get(k), this.matriz[i][j]);
+						if (distancia < this.matriz[i][j].getHeuristica()) {
+							this.matriz[i][j].setHeuristica(distancia);
 						}
 					}
 				}
 			}
 		}
 	}
-
+	
+	//Carga la heuristica solamente de las cajas
 	public void cargarHeuristicaMonedasv2() {
 		double mejor = calcularHeuristica(r, listaMonedas.get(0));
 		Casilla mejorM = new Casilla(listaMonedas.get(0).getFila(), listaMonedas.get(0).getColumna(),
-				listaMonedas.get(0).getValor(), listaMonedas.get(0).heuristica);
-		listaMonedas.get(0).setHeuristica(mejor);
+				listaMonedas.get(0).getValor(), mejor);
+		
 		// System.out.print("MEJOR: "+mejor);
 
 		for (int i = 1; i < listaMonedas.size(); i++) {
@@ -371,78 +437,84 @@ public class Tablero {
 			}
 		}
 		if (mObjetivo == null) {
+			this.listaMonedas.remove(mejorM);
 			this.mObjetivo = new Casilla(mejorM.getFila(), mejorM.getColumna(),mejorM.getValor(), mejorM.getHeuristica());
-			Collections.sort(listaMonedas, new ComparatorMonedas());
-			this.listaMonedas.remove(0);
 			this.r.setHeuristica(mObjetivo.getHeuristica());
+			Collections.sort(listaMonedas, new CasillaHeuristicaComparator());
+			
 		}
 		// System.out.print("MEJOR: "+mejor+ mejorM.getFilaMoneda()+"
 		// "+mejorM.getColumnaMoneda());
 	}
-
-	public void resetearHeuristica() {
-		this.cartera = this.getCartera() - this.mObjetivo.getValor();
-		this.r.setHeuristica(0);
-		this.mObjetivo = null;
-	}
-    public void impresionMatrizVisual(Casilla[][] Matriz, int N) {
-        String x;
-        for (int i = 0; i < N; i++) {
-            for (int j = 0; j < N; j++) {
-                switch (Matriz[i][j].getValor()) {
-                    case 0:
-                        x = " . ";
-                        break;
-                    case 1:
-                    case 2:
-                    case 3:
-                    case 4:
-                    case 5:
-                    case 6:
-                        x = " " + Matriz[i][j].getValor() + " ";
-                        break;
-                    case 7:
-                        x = " S ";
-                        break;
-                    case 8:
-                        x = " @ ";
-                        break;
-                    case 9:
-                        x = " # ";
-                        break;
-                    default:
-                        return;
-                }
-                System.out.print(x);
-            }
-            System.out.println();
-        }
-    }
+	
 	public void cargarHeuristicaSalida() {
 
 	}
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Tablero other = (Tablero) obj;
-		return N == other.N && Objects.deepEquals(listaMonedas, other.listaMonedas)
-				&& Objects.equals(lastMov, other.lastMov) && Arrays.deepEquals(matriz, other.matriz)
-				&& cartera == other.cartera && Objects.equals(r, other.r)&& Objects.equals(mObjetivo, other.mObjetivo);
+	//Resetea la heristica
+	public void resetearHeuristica() {
+		for (int i = 0; i < N; i++) {
+			for (int j = 0; j < N; j++) {
+				if (posicionLibre(i, j)) this.matriz[i][j].setHeuristica(100);
+			}
+		}
+//		this.r.setHeuristica(0);
+//		this.setNumeroMonedas(this.numeroMonedas--);
+//		this.mObjetivo = null;
 	}
-	// public static void main(String[] args) {
-	// Datos_Iniciales d = new Datos_Iniciales("LABECOIN1.txt");
-	// Tablero n = d.getTablero();
-	// System.out.println("PosiciÃ³n actual robot " + n.r.getFilaRobot() + " " +
-	// n.r.getColumnaRobot());
-	// n.movimientoRobot("A");
-	// System.out.println("PosiciÃ³n actual robot " + n.r.getFilaRobot() + " " +
-	// n.r.getColumnaRobot());
-	// n.mostrarListaMonedas();
-	// }
+	
+	//Disminuye la cartera 
+	public void reducirCartera(int valor) {
+		this.cartera -= valor;
+	}
+	
+	//Imprime de una forma mas visual la matriz
+	 public void impresionMatrizVisual() {
+	        String x;
+	        for (int i = 0; i < this.N; i++) {
+	            for (int j = 0; j < this.N; j++) {
+	                switch (this.matriz[i][j].getValor()) {
+	                    case 0:
+	                        x = " . ";
+	                        break;
+	                    case 1:
+	                    case 2:
+	                    case 3:
+	                    case 4:
+	                    case 5:
+	                    case 6:
+	                        x = " " + this.matriz[i][j].getValor() + " ";
+	                        break;
+	                    case 7:
+	                        x = " S ";
+	                        break;
+	                    case 8:
+	                        x = " @ ";
+	                        break;
+	                    case 9:
+	                        x = " # ";
+	                        break;
+	                    default:
+	                        return;
+	                }
+	                System.out.print(x);
+	            }
+	            System.out.println();
+	        }
+	    }
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj)
+				return true;
+			if (obj == null)
+				return false;
+			if (getClass() != obj.getClass())
+				return false;
+			Tablero other = (Tablero) obj;
+			return N == other.N && Objects.deepEquals(listaMonedas, other.listaMonedas)
+					&& Objects.equals(lastMov, other.lastMov) && Arrays.deepEquals(matriz, other.matriz)
+					&& cartera == other.cartera && Objects.equals(r, other.r)&& Objects.equals(mObjetivo, other.mObjetivo);
+		}
+
+
 }

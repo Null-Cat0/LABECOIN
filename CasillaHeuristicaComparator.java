@@ -1,5 +1,5 @@
 import java.util.Comparator;
-public class ComparatorMonedas implements Comparator<Casilla> {
+public class CasillaHeuristicaComparator implements Comparator<Casilla> {
 
     @Override
     public int compare(Casilla o1, Casilla o2) {

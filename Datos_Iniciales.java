@@ -1,27 +1,27 @@
-import java.io.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 
 public class Datos_Iniciales {
-
 	private String nombre; // Nombre del fichero
-	Casilla[][] matrizAuxiliar;
-	private Tablero tab;
-	int N_Aux;
-	int cartera_Aux;
+	private int N_Aux;
+	 int cartera_Aux;
+	 Tablero tablero;
 
 	public Datos_Iniciales(String _nombre) {
 
 		nombre = "Ejemplos/" + _nombre;
 		N_Aux = ordenMatriz();
-		matrizAuxiliar = new Casilla[N_Aux][N_Aux];// Reservar espacio en la memoria para la matriz
+		tablero = new Tablero(N_Aux);
 		leerFichero();
-		tab = new Tablero(this.getListaMonedas(), this.getFilaRobot(), this.getColumnaRobot(), matrizAuxiliar,
-				cartera_Aux, N_Aux);
+		tablero.setCartera(cartera_Aux);
 
 	}
-
+	public Tablero getTablero() 
+	{
+		return this.tablero;
+	}
 	private int ordenMatriz() {
 		int aux = 0;
 		BufferedReader br = null;
@@ -29,7 +29,7 @@ public class Datos_Iniciales {
 
 			br = new BufferedReader(new FileReader(nombre));
 
-			String texto = br.readLine(); // Primera lÃ­nea, no necesaria.
+			String texto = br.readLine(); // Primera línea, no necesaria.
 			texto = br.readLine(); // Primera fila de la matriz.
 			String[] parts = texto.split(","); // Division de la fila
 			aux = parts.length;
@@ -52,7 +52,8 @@ public class Datos_Iniciales {
 		return aux;
 
 	}
-
+	
+	//Lee el fichero
 	private void leerFichero() {
 
 		BufferedReader br = null;
@@ -63,20 +64,20 @@ public class Datos_Iniciales {
 			br = new BufferedReader(new FileReader(nombre));
 
 			String texto = br.readLine();
-			cartera_Aux = Integer.valueOf(texto); // Lectura de la primera lÃ­nea
+			cartera_Aux = Integer.valueOf(texto); // Lectura de la primera línea
 
 			texto = br.readLine();
 
 			while (texto != null && i < N) {
 
-				// Tratamiento de la lÃ­nea leida
+				// Tratamiento de la línea leida
 				String[] parts = texto.split(","); // Division de la fila
 
 				for (j = 0; j < N; j++) {
-					matrizAuxiliar[i][j] = new Casilla (i,j,Integer.valueOf(parts[j]),15);
+					tablero.matriz[i][j] = new Casilla (i,j,Integer.valueOf(parts[j]),100);
 				}
 
-				texto = br.readLine(); // Siguiente lÃ­nea
+				texto = br.readLine(); // Siguiente línea
 				
 				i++;
 			}
@@ -98,58 +99,4 @@ public class Datos_Iniciales {
 			}
 		}
 	}
-
-	private List<Casilla> getListaMonedas() {
-		int N = N_Aux;
-		List<Casilla> listaMonedas = new ArrayList<>();
-		for (int i = 0; i < N; i++) {
-			for (int j = 0; j < N; j++) {
-				if ((this.matrizAuxiliar[i][j].getValor() <= 6) && (this.matrizAuxiliar[i][j].getValor() >= 1)) {
-					// Creamos Moneda
-					Casilla aux = new Casilla();
-					aux.setColumna(j);
-					aux.setFila(i);
-					aux.setValor(this.matrizAuxiliar[i][j].getValor());
-					// Insertamos Moneda
-					listaMonedas.add(aux);
-				}
-
-			}
-		}
-		// Para ordenar las monedas en valor descendente (de mayor valor a menor valor)
-		// Collections.sort(listaMonedas,Collections.reverseOrder (new
-		// ComparatorValorMoneda()));
-		return listaMonedas;
-	}
-
-	private int getFilaRobot() {
-		int N = N_Aux;
-		for (int i = 0; i < N; i++) {
-			for (int j = 0; j < N; j++) {
-				if (matrizAuxiliar[i][j].getValor() == 8)
-					return i;
-			}
-		}
-		return -1;
-	}
-
-	private int getColumnaRobot() {
-		int N = N_Aux;
-		for (int i = 0; i < N; i++) {
-			for (int j = 0; j < N; j++) {
-				if (matrizAuxiliar[i][j].getValor() == 8)
-					return j;
-			}
-		}
-		return -1;
-	}
-
-	public Tablero getTablero() {
-		return tab;
-	}
-
-	// public static void main(String[] args) {
-	// 		Datos_Iniciales n = new Datos_Iniciales("LABECOIN1.txt");
-			
-	// }
 }
