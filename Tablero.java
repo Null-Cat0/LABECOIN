@@ -139,7 +139,7 @@ public class Tablero {
 	
 	/*
 	 * 
-	 * MÉTODOS DE LA CLASE
+	 * Mï¿½TODOS DE LA CLASE
 	 * 
 	 */
 	
@@ -243,7 +243,7 @@ public class Tablero {
 		return posiblesMov;
 	}
 	
-	//Mueve el robot en la dirección indicada en "direccion" (Si es posible)
+	//Mueve el robot en la direcciï¿½n indicada en "direccion" (Si es posible)
 	void movimientoRobot(String direccion) {
 
 		int fila = this.r.getFila();
@@ -409,7 +409,8 @@ public class Tablero {
 			for (int i = 0; i < N; i++) {
 				for (int j = 0; j < N; j++) {
 					if (posicionLibre(i, j)) {
-						distancia = this.calcularDistancia(this.listaMonedas.get(k), this.matriz[i][j]);
+						distancia = this.calcularHeuristica(this.listaMonedas.get(k),  this.matriz[i][j]);
+						//distancia = this.calcularDistancia(this.listaMonedas.get(k), this.matriz[i][j]);
 						if (distancia < this.matriz[i][j].getHeuristica()) {
 							this.matriz[i][j].setHeuristica(distancia);
 						}

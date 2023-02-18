@@ -8,7 +8,7 @@ public class PrimeroMejor {
 	private List <String> movimientos;
 	private Tablero actual;
 	private int contadorNodos;
-	static int maxNodos = 100000; 
+	static int maxNodos = 100001; 
 	
 	public PrimeroMejor(Tablero tab) {
 		actual = tab;
@@ -40,7 +40,8 @@ public class PrimeroMejor {
 					//hijo.cargarHeuristicaSalida();
 				}
 				else {
-					hijo.cargarHeuristicaMonedasTodaMatriz(); 
+					hijo.cargarHeuristicaMonedasv2();
+					//hijo.cargarHeuristicaMonedasTodaMatriz(); 
 				}
 			}
 			if (!noMoves) hijo.movimientoRobot(mov);
@@ -98,8 +99,8 @@ public class PrimeroMejor {
 	}
 	
 	public void mostrarResultados() {
-		//if(contadorNodos >= maxNodos) System.out.println("La ejecucion se ha detenido porque se excede el numero de nodos generados");
-		//else {
+		if(contadorNodos >= maxNodos) System.out.println("La ejecucion se ha detenido porque se excede el numero de nodos generados");
+		else {
 			System.out.println("Mostramos el camino recorrido: ");
 
 			Tablero aux = actual.getLastTablero();
@@ -123,7 +124,7 @@ public class PrimeroMejor {
 			System.out.println("\nEstado final del tablero:\n" );
 			System.out.println(actual.getCartera());
 			actual.impresionMatrizVisual();
-		//}
+		}
 		System.out.println("El numero de nodos generados es: " + contadorNodos);
 	}
     public static void main(String[] args) {
