@@ -15,7 +15,8 @@ tienen un valor asignado que se corresponden con:
 <li>8 – ROBOT  </li>
 <li>7 – SALIDA   </li>
 <li>1-6 – MONEDAS</li>
-<ul>
+</ul>
+<p>
 El movimiento del robot puede ser Arriba, aBajo, Derecha, Izquierda, y las diagonales (AI, AD, BD, BI).
 No se podrá mover a una casilla que haya un muro. Cuando se mueva a una casilla con monedas, debe
 sumarse esa cantidad al acumulado de monedas (cartera) del camino. Sólo se suma una vez la moneda al
