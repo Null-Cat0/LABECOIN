@@ -364,7 +364,7 @@ public class Tablero {
 			case "BI":
 				if (posicionLibre(fila + 1, columna - 1) ) {
 					if(esMoneda(fila + 1, columna -1))
-					hucha = hucha + this.matriz[fila+1][columna-1].getValor();
+						hucha = hucha + this.matriz[fila+1][columna-1].getValor();
 					this.r.setFila(fila + 1);
 					this.r.setColumna(columna - 1);
 
