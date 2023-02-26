@@ -1,6 +1,8 @@
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+
 
 public class PrimeroMejor {
 	private List <Tablero> abiertos;
@@ -16,10 +18,12 @@ public class PrimeroMejor {
 		cerrados = new ArrayList<>();
 		movimientos = new ArrayList<>();
 		contadorNodos = 0;
-		System.out.println(actual.getCartera());
 		actual.encontrarRobot(); 
 		actual.encontrarMonedas();
+		actual.encontrarSalida();
+		System.out.println("fila: "+actual.salida.getFila()+" columna: "+actual.salida.getColumna());
 		actual.cargarHeuristicaMonedasTodaMatriz();
+		
 	}
 	public List <Tablero> generarSucesores(Tablero tab) {
 		List <String> posiblesMov = tab.obtenerPosiblesMov();
@@ -35,9 +39,10 @@ public class PrimeroMejor {
 				noMoves = true;
 				hijo.movimientoRobot(mov);
 				hijo.resetearHeuristica();
-				if (hijo.getCartera()==0) {
-					break;
-					//hijo.cargarHeuristicaSalida();
+				
+				if (hijo.getHucha() >= hijo.getCartera()) {
+					System.out.println("Hucha: "+hijo.getHucha()+" Cartera: "+hijo.getCartera());
+					hijo.cargarHeuristicaSalida();
 				}
 				else {
 					hijo.cargarHeuristicaMonedasv2();
@@ -74,7 +79,7 @@ public class PrimeroMejor {
 		
 		abiertos.add(actual);
 
-		while (!abiertos.isEmpty() && contadorNodos < maxNodos) {
+		while (!actual.fin() && !abiertos.isEmpty() ) {
 			abiertos.remove(0);
 			cerrados.add(actual);
 
@@ -90,8 +95,7 @@ public class PrimeroMejor {
 			}
 
 			// Ordenamos la lista de abiertos
-			Collections.sort(abiertos, new MonedasEnTableroCoparator());
-
+			Collections.sort(abiertos, Collections.reverseOrder(new HuchaComparator()));
 			if (!abiertos.isEmpty()) {
 				actual = abiertos.get(0);
 			}
@@ -99,8 +103,8 @@ public class PrimeroMejor {
 	}
 	
 	public void mostrarResultados() {
-		if(contadorNodos >= maxNodos) System.out.println("La ejecucion se ha detenido porque se excede el numero de nodos generados");
-		else {
+	//	if(contadorNodos >= maxNodos) System.out.println("La ejecucion se ha detenido porque se excede el numero de nodos generados");
+	//	else {
 			System.out.println("Mostramos el camino recorrido: ");
 
 			Tablero aux = actual.getLastTablero();
@@ -122,9 +126,10 @@ public class PrimeroMejor {
 			System.out.println(movimientos.get(0));
 
 			System.out.println("\nEstado final del tablero:\n" );
+			System.out.println(actual.getHucha());
 			System.out.println(actual.getCartera());
 			actual.impresionMatrizVisual();
-		}
+	//	}
 		System.out.println("El numero de nodos generados es: " + contadorNodos);
 	}
     public static void main(String[] args) {
@@ -132,7 +137,7 @@ public class PrimeroMejor {
         PrimeroMejor m = new PrimeroMejor(d.getTablero());
         m.primeroMejor();
         m.mostrarResultados();
-        // m.generarSucesores(d.getTablero());
+       // m.generarSucesores(d.getTablero());
 
     }
 }

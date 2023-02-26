@@ -7,13 +7,16 @@ import java.util.Objects;
 public class Tablero {
 	private Casilla r;
 	private Casilla mObjetivo;
+	 Casilla salida;
 	public Casilla[][] matriz;
 	private List<Casilla> listaMonedas;
 	private int cartera;
 	private int N;
 	private int numeroMonedas;
+	private int hucha;
 	private String lastMov;
 	private Tablero ultTablero;
+	
 	
 	Tablero(List<Casilla> _listaMonedas, int filaRobot, int columnaRobot, Casilla[][] _matriz, int _cartera, int _N, Tablero ultTablero) {
 		this.r = new Casilla();
@@ -27,6 +30,8 @@ public class Tablero {
 		this.lastMov = " ";
 		this.ultTablero = ultTablero;
 		this.mObjetivo = null;
+		this.salida = null;
+		this.hucha=0;
 	}
 	Tablero(int _N) {
 		this.r = new Casilla();
@@ -37,6 +42,8 @@ public class Tablero {
 		this.lastMov = " ";
 		this.mObjetivo = null;
 		this.ultTablero = null;
+		this.salida = null;
+		this.hucha=0;
 	}
 	
 	/*
@@ -62,6 +69,9 @@ public class Tablero {
 	}
 	public int getN() {
 		return this.N;
+	}
+	public int getHucha() {
+		return this.hucha;
 	}
 	public String getLastMov() {
 		return this.lastMov;
@@ -106,7 +116,10 @@ public class Tablero {
 	{
 		return this.r.getHeuristica();
 	}
-	
+	public boolean esMoneda(int fila, int columna)
+	{
+		return this.matriz[fila][columna].getValor() >=1 && this.matriz[fila][columna].getValor() <=6;
+	}
 	/*
 	 * 
 	 * BUSQUEDA DE ROBOT, MONEDAS....
@@ -132,6 +145,15 @@ public class Tablero {
 			for (int j = 0; j < this.N; j++) {
 				if (this.matriz[i][j].getValor() == 8)
 					this.r = new Casilla(i,j,8,0) ;
+			}
+		}
+		
+	}
+	public void encontrarSalida() {
+		for (int i = 0; i < this.N; i++) {
+			for (int j = 0; j < this.N; j++) {
+				if (this.matriz[i][j].getValor() == 7)
+					this.salida = new Casilla(i,j,7,100) ;
 			}
 		}
 		
@@ -253,6 +275,8 @@ public class Tablero {
 			case "A":
 				if (posicionLibre(fila - 1, columna)) {
 					
+					if(esMoneda(fila - 1, columna))
+						hucha = hucha + this.matriz[fila-1][columna].getValor();
 					this.r.setFila(fila - 1);
 					this.matriz[fila][columna].setValor(0);
 					this.matriz[fila - 1][columna].setValor(8);
@@ -263,7 +287,8 @@ public class Tablero {
 			case "B":
 				
 				if (posicionLibre(fila + 1, columna)) {
-					
+					if(esMoneda(fila + 1, columna))
+						hucha = hucha + this.matriz[fila +1][columna].getValor();					
 					this.r.setFila(fila + 1);
 
 					this.matriz[fila][columna].setValor(0);
@@ -274,7 +299,8 @@ public class Tablero {
 
 			case "D":
 				if (posicionLibre(fila, columna + 1)) {
-					
+					if(esMoneda(fila , columna +1))
+						hucha = hucha + this.matriz[fila][columna +1].getValor();					
 					this.r.setColumna(columna + 1);
 
 					this.matriz[fila][columna].setValor(0);
@@ -285,7 +311,8 @@ public class Tablero {
 
 			case "I":
 				if (posicionLibre(fila, columna - 1)) {
-					
+					if(esMoneda(fila , columna -1))
+						hucha = hucha + this.matriz[fila][columna -1].getValor();					
 					this.r.setColumna(columna - 1);
 
 					this.matriz[fila][columna].setValor(0);
@@ -297,7 +324,8 @@ public class Tablero {
 			// Diagonales
 			case "AI":
 				if (posicionLibre(fila - 1, columna - 1)) {
-
+					if(esMoneda(fila - 1, columna -1))
+						hucha = hucha + this.matriz[fila-1][columna -1].getValor();
 					this.r.setFila(fila - 1);
 					this.r.setColumna(columna - 1);
 
@@ -309,6 +337,8 @@ public class Tablero {
 
 			case "AD":
 				if (posicionLibre(fila - 1, columna + 1)) {
+					if(esMoneda(fila - 1, columna +1))
+					hucha = hucha + this.matriz[fila-1][columna +1].getValor();
 					this.r.setFila(fila - 1);
 					this.r.setColumna(columna + 1);
 
@@ -320,6 +350,8 @@ public class Tablero {
 
 			case "BD":
 				if (posicionLibre(fila + 1, columna + 1)) {
+					if(esMoneda(fila + 1, columna +1))
+						hucha = hucha + this.matriz[fila+1][columna +1].getValor();			
 					this.r.setFila(fila + 1);
 					this.r.setColumna(columna + 1);
 
@@ -331,6 +363,8 @@ public class Tablero {
 
 			case "BI":
 				if (posicionLibre(fila + 1, columna - 1) ) {
+					if(esMoneda(fila + 1, columna -1))
+					hucha = hucha + this.matriz[fila+1][columna-1].getValor();
 					this.r.setFila(fila + 1);
 					this.r.setColumna(columna - 1);
 
@@ -377,7 +411,8 @@ public class Tablero {
 				tab.matriz[i][j] = new Casilla(this.matriz[i][j].getFila(),this.matriz[i][j].getColumna(),this.matriz[i][j].getValor(), this.matriz[i][j].getHeuristica());
 			}
 		}
-		
+		tab.hucha = this.hucha;
+		tab.salida = new Casilla(this.salida.getFila(),this.salida.getColumna(),this.salida.getValor(),this.salida.getHeuristica());
 		tab.r = new Casilla(this.r.getFila(),this.r.getColumna(),
 				this.r.getValor(), this.r.getHeuristica());
 		tab.cartera = this.cartera;
@@ -449,7 +484,18 @@ public class Tablero {
 	}
 	
 	public void cargarHeuristicaSalida() {
-
+		double distancia;
+			for (int i = 0; i < N; i++) {
+				for (int j = 0; j < N; j++) {
+					if (posicionLibre(i, j)) {
+						distancia = this.calcularDistancia(salida,  this.matriz[i][j]);
+						//distancia = this.calcularDistancia(this.listaMonedas.get(k), this.matriz[i][j]);
+						if (distancia < this.matriz[i][j].getHeuristica()) {
+							this.matriz[i][j].setHeuristica(distancia);
+						}
+					}
+				}
+			}
 	}
 
 	//Resetea la heristica
@@ -503,6 +549,10 @@ public class Tablero {
 	            System.out.println();
 	        }
 	    }
+		public boolean fin()
+		{
+			return this.r.getFila() == this.salida.getFila() && this.r.getColumna() == this.salida.getColumna();
+		}
 		@Override
 		public boolean equals(Object obj) {
 			if (this == obj)
@@ -514,7 +564,7 @@ public class Tablero {
 			Tablero other = (Tablero) obj;
 			return N == other.N && Objects.deepEquals(listaMonedas, other.listaMonedas)
 					&& Objects.equals(lastMov, other.lastMov) && Arrays.deepEquals(matriz, other.matriz)
-					&& cartera == other.cartera && Objects.equals(r, other.r)&& Objects.equals(mObjetivo, other.mObjetivo);
+					&& cartera == other.cartera && Objects.equals(r, other.r)&& Objects.equals(mObjetivo, other.mObjetivo) && Objects.equals(salida, other.salida) && hucha == other.hucha;
 		}
 
 
