@@ -1,6 +1,8 @@
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 
@@ -135,8 +137,13 @@ public class PrimeroMejor {
     public static void main(String[] args) {
         Datos_Iniciales d = new Datos_Iniciales("LABECOIN1.txt");
         PrimeroMejor m = new PrimeroMejor(d.getTablero());
+		
+		long initialTime;
+		initialTime = new Date().getTime();
+				
         m.primeroMejor();
         m.mostrarResultados();
+		System.out.println ("Tiempo total empleado: " + (new Date().getTime() - initialTime) + "ms");
        // m.generarSucesores(d.getTablero());
 
     }

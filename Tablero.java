@@ -551,7 +551,7 @@ public class Tablero {
 	    }
 		public boolean fin()
 		{
-			return this.r.getFila() == this.salida.getFila() && this.r.getColumna() == this.salida.getColumna();
+			return this.r.getFila() == this.salida.getFila() && this.r.getColumna() == this.salida.getColumna() && this.hucha >= this.cartera;
 		}
 		@Override
 		public boolean equals(Object obj) {
