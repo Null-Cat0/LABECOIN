@@ -1,4 +1,4 @@
-# LABECOIN
+<h1 align=center> LABECOIN</h1>
 
 Proyecto de la asignatura Inteligencia Artificial y Sistemas Inteligentes. Escuela Politécnica de Cáceres
 
