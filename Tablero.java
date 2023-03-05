@@ -55,7 +55,9 @@ public class Tablero {
 	public Casilla getRobot() {
 		return this.r;
 	}
-
+	public Casilla getSalida() {
+		return this.salida;
+	}
 	public Casilla getmObjetivo() {
 		return this.mObjetivo;
 	}
@@ -129,7 +131,12 @@ public class Tablero {
 	}
 
 	public double getHeuristicaTablero() {
-		return this.r.getHeuristica();
+		int fila = this.r.getFila();
+		int columna = this.r.getColumna();
+		if (fila < 9 && columna < 9) 
+			return this.matriz[fila][columna].getHeuristica();
+			else return 5;
+		//return this.r.getHeuristica();
 	}
 
 	public boolean esMoneda(int fila, int columna) {
@@ -185,7 +192,8 @@ public class Tablero {
 
 	// Devuelve si la posicion i , j de la matriz es un muro
 	public boolean posicionLibre(int i, int j) {
-		return this.matriz[i][j].getValor() != 9;
+	
+			return this.matriz[i][j].getValor() != 9;
 	}
 
 	public Double obtenerHeuristicaMov(String direccion) {
@@ -237,7 +245,7 @@ public class Tablero {
 				break;
 
 			default:
-				valor = 0;
+				valor = this.r.getHeuristica();
 		}
 
 		// System.out.println("FILA robot : "+fila+" COLUMNA robot :"+ columna +" FILA
@@ -253,7 +261,7 @@ public class Tablero {
 
 		int fila = this.r.getFila();
 		int columna = this.r.getColumna();
-		if (fila < 9 && columna < 9) {
+		if (fila < 9 && columna < 9 && fila >0 && columna >0) {
 			if (posicionLibre(fila - 1, columna) /* && !this.lastMov.equals("B") */ )
 				posiblesMov.add("A");
 
@@ -294,6 +302,7 @@ public class Tablero {
 					if (esMoneda(fila - 1, columna)) {
 						hucha = hucha + this.matriz[fila - 1][columna].getValor();
 						this.numeroMonedas--;
+						
 
 					}
 					this.r.setFila(fila - 1);
@@ -309,6 +318,7 @@ public class Tablero {
 					if (esMoneda(fila + 1, columna)) {
 						hucha = hucha + this.matriz[fila + 1][columna].getValor();
 						this.numeroMonedas--;
+						
 					}
 					this.r.setFila(fila + 1);
 
@@ -323,6 +333,7 @@ public class Tablero {
 					if (esMoneda(fila, columna + 1)) {
 						hucha = hucha + this.matriz[fila][columna + 1].getValor();
 						this.numeroMonedas--;
+						
 					}
 					this.r.setColumna(columna + 1);
 
@@ -337,6 +348,7 @@ public class Tablero {
 					if (esMoneda(fila, columna - 1)) {
 						hucha = hucha + this.matriz[fila][columna - 1].getValor();
 						this.numeroMonedas--;
+						
 
 					}
 					this.r.setColumna(columna - 1);
@@ -353,6 +365,7 @@ public class Tablero {
 					if (esMoneda(fila - 1, columna - 1)) {
 						hucha = hucha + this.matriz[fila - 1][columna - 1].getValor();
 						this.numeroMonedas--;
+					
 					}
 					this.r.setFila(fila - 1);
 					this.r.setColumna(columna - 1);
@@ -367,6 +380,7 @@ public class Tablero {
 				if (posicionLibre(fila - 1, columna + 1)) {
 					if (esMoneda(fila - 1, columna + 1)) {
 						hucha = hucha + this.matriz[fila - 1][columna + 1].getValor();
+						this.numeroMonedas--;
 					}
 					this.r.setFila(fila - 1);
 					this.r.setColumna(columna + 1);
@@ -478,16 +492,14 @@ public class Tablero {
 
 	// Carga la heuristica de la matriz completa
 	public void cargarHeuristicaMonedasTodaMatriz() {
-		double distancia;
+		double distanciaPonderada;
 		for (int k = 0; k < listaMonedas.size(); k++) {
 			for (int i = 0; i < N; i++) {
 				for (int j = 0; j < N; j++) {
 					if (posicionLibre(i, j)) {
-						distancia = this.calcularHeuristica(this.listaMonedas.get(k), this.matriz[i][j]);
-						// distancia = this.calcularDistancia(this.listaMonedas.get(k),
-						// this.matriz[i][j]);
-						if (distancia < this.matriz[i][j].getHeuristica()) {
-							this.matriz[i][j].setHeuristica(distancia);
+						distanciaPonderada = this.calcularHeuristica(this.listaMonedas.get(k), this.matriz[i][j]);
+						if (distanciaPonderada < this.matriz[i][j].getHeuristica()) {
+							this.matriz[i][j].setHeuristica(distanciaPonderada);
 						}
 					}
 				}
@@ -525,15 +537,14 @@ public class Tablero {
 	}
 
 	public void cargarHeuristicaSalida() {
-		double distancia;
+		double distanciaPonderada;
 		for (int i = 0; i < N; i++) {
 			for (int j = 0; j < N; j++) {
 				if (posicionLibre(i, j)) {
-					distancia = this.calcularDistancia(salida, this.matriz[i][j]);
-					// distancia = this.calcularDistancia(this.listaMonedas.get(k),
-					// this.matriz[i][j]);
-					if (distancia < this.matriz[i][j].getHeuristica()) {
-						this.matriz[i][j].setHeuristica(distancia);
+					distanciaPonderada = this.calcularDistancia(salida, this.matriz[i][j]);
+
+					if (distanciaPonderada < this.matriz[i][j].getHeuristica()) {
+						this.matriz[i][j].setHeuristica(distanciaPonderada);
 					}
 				}
 			}
@@ -548,9 +559,6 @@ public class Tablero {
 					this.matriz[i][j].setHeuristica(100);
 			}
 		}
-		// this.r.setHeuristica(0);
-		// this.setNumeroMonedas(this.numeroMonedas--);
-		// this.mObjetivo = null;
 	}
 
 	// Disminuye la cartera

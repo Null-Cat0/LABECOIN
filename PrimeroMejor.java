@@ -43,8 +43,7 @@ public class PrimeroMejor {
 				hijo.resetearHeuristica();
 				
 				if (hijo.getHucha() >= hijo.getCartera()) {
-					System.out.println("Hucha: "+hijo.getHucha()+" Cartera: "+hijo.getCartera());
-					hijo.cargarHeuristicaSalida();
+						hijo.cargarHeuristicaSalida();
 				}
 				else {
 					hijo.cargarHeuristicaMonedasv2();
@@ -135,7 +134,7 @@ public class PrimeroMejor {
 		System.out.println("El numero de nodos generados es: " + contadorNodos);
 	}
     public static void main(String[] args) {
-        Datos_Iniciales d = new Datos_Iniciales("LABECOIN1.txt");
+        Datos_Iniciales d = new Datos_Iniciales("LABECOIN10.txt");
         PrimeroMejor m = new PrimeroMejor(d.getTablero());
 		
 		long initialTime;
