@@ -56,23 +56,26 @@ public class MaximaPendiente {
 				
 				if (tablero.obtenerHeuristicaMovSinMatriz(mov) <= tablero.getHeuristicaTablero(aux) ) {
 						enc = true;
+						if(tablero.obtenerHeuristicaMovSinMatriz(mov) == 0)
+						{
+							tablero.getListaMonedas().remove(tablero.mObjetivo);
+							tablero.encontrarMObjetivo();
+						
+						}
 						tablero.movimientoRobot(mov);
+						
 						noMoves = true;
+						
 						System.out.println( "hucha "+ tablero.getHucha());
 						
 						if (tablero.getCartera() == tablero.getHucha()) {
-							//aux = false;
-							//return;
-							//tablero.cargarHeuristicaSalida();
 							tablero.setmObjetivo(tablero.salida);
 							System.out.println("---------------------------------------------------------------------------------------------------");
 							System.out.println(tablero.mObjetivo.getFila()+ " "  + tablero.mObjetivo.getColumna());
-							maximaPendiente();
-							//return;	
+							movEscaladaSimple.add(mov);
+							maximaPendiente();	
 						}
 						else {
-							//tablero.cargarHeuristicaMonedasv2();
-							//tablero.cargarHeuristicaMonedasTodaMatriz();
 							movEscaladaSimple.add(mov);
 							maximaPendiente(); 
 						}
@@ -97,7 +100,7 @@ public class MaximaPendiente {
         Datos_Iniciales d = new Datos_Iniciales("LABECOIN2.txt");
         MaximaPendiente m = new MaximaPendiente(d.getTablero());
         m.maximaPendiente();
-       m.mostrarResultados();
+        m.mostrarResultados();
 
     }
 }

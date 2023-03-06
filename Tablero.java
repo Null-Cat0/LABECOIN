@@ -378,7 +378,6 @@ public class Tablero {
 					if (esMoneda(fila - 1, columna)) {
 						hucha = hucha + this.matriz[fila - 1][columna].getValor();
 						this.numeroMonedas--;
-
 					}
 					this.r.setFila(fila - 1);
 					this.matriz[fila][columna].setValor(0);

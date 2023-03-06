@@ -135,7 +135,7 @@ public class PrimeroMejor {
 		System.out.println("El numero de nodos generados es: " + contadorNodos);
 	}
     public static void main(String[] args) {
-        Datos_Iniciales d = new Datos_Iniciales("LABECOIN1.txt");
+        Datos_Iniciales d = new Datos_Iniciales("LABECOIN2.txt");
         PrimeroMejor m = new PrimeroMejor(d.getTablero());
 		
 		long initialTime;
