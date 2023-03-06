@@ -20,35 +20,32 @@ public class PrimeroMejor {
 		cerrados = new ArrayList<>();
 		movimientos = new ArrayList<>();
 		contadorNodos = 0;
+
 		actual.encontrarRobot(); 
 		actual.encontrarMonedas();
 		actual.encontrarSalida();
-		System.out.println("fila: "+actual.salida.getFila()+" columna: "+actual.salida.getColumna());
-		actual.cargarHeuristicaMonedasv2();
-		//actual.cargarHeuristicaMonedasTodaMatriz();
-		
+		actual.encontrarMObjetivo();
 	}
 	public List <Tablero> generarSucesores(Tablero tab) {
+		
 		List <String> posiblesMov = tab.obtenerPosiblesMov();
 		List <Tablero> hijos = new ArrayList<>();
 		boolean noMoves; // Usado para no realizar el movimiento dos veces en el caso de cargar la heuristica
 		Tablero hijo;
+		
 		for (int i = 0; i < posiblesMov.size(); i++) {
 			hijo = tab.copiarTablero();
 			contadorNodos++;
 			String mov = posiblesMov.get(i);
 			noMoves = false;
-			if (hijo.obtenerHeuristicaMov(mov) == 0) {
+			if (hijo.obtenerHeuristicaMovSinMatriz(mov) == 0) {
 				noMoves = true;
 				hijo.movimientoRobot(mov);
-				hijo.resetearHeuristica();
+				hijo.getListaMonedas().remove(hijo.mObjetivo);
+				hijo.encontrarMObjetivo();
 				
 				if (hijo.getHucha() >= hijo.getCartera()) {
-						hijo.cargarHeuristicaSalida();
-				}
-				else {
-					hijo.cargarHeuristicaMonedasv2();
-					//hijo.cargarHeuristicaMonedasTodaMatriz(); 
+					hijo.setmObjetivo(hijo.salida);
 				}
 			}
 			if (!noMoves) hijo.movimientoRobot(mov);
@@ -134,8 +131,9 @@ public class PrimeroMejor {
 	//	}
 		System.out.println("El numero de nodos generados es: " + contadorNodos);
 	}
+
     public static void main(String[] args) {
-        Datos_Iniciales d = new Datos_Iniciales("LABECOIN2.txt");
+        Datos_Iniciales d = new Datos_Iniciales("LABECOIN1.txt");
         PrimeroMejor m = new PrimeroMejor(d.getTablero());
 		
 		long initialTime;
@@ -144,7 +142,5 @@ public class PrimeroMejor {
         m.primeroMejor();
         m.mostrarResultados();
 		System.out.println ("Tiempo total empleado: " + (new Date().getTime() - initialTime) + "ms");
-       // m.generarSucesores(d.getTablero());
-
     }
 }

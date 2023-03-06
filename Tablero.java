@@ -132,7 +132,7 @@ public class Tablero {
 		this.numeroMonedas = numeroMonedas;
 	}
 
-	public double getHeuristicaTablero(boolean aux) {
+	public double getHeuristicaTablero() {
 
 		 return calcularHeuristica(this.r, this.mObjetivo);
 	}
@@ -209,7 +209,7 @@ public class Tablero {
 		return this.matriz[i][j].getValor() != 9;
 	}
 
-	public Double obtenerHeuristicaMovSinMatriz(String direccion) {
+	public Double getHeuristicaMovSinMatriz(String direccion) {
 
 		int fila = this.r.getFila();
 		int columna = this.r.getColumna();
@@ -272,7 +272,7 @@ public class Tablero {
 		return valor;
 	}
    
-	public Double obtenerHeuristicaMov(String direccion) {
+	public Double getHeuristicaMov(String direccion) {
 
 		int fila = this.r.getFila();
 		int columna = this.r.getColumna();
@@ -332,7 +332,7 @@ public class Tablero {
 	}
 
 	// Devuelve la lista de movimientos que puede realizar el robot.
-	public List<String> obtenerPosiblesMov() {
+	public List<String> getPosiblesMov() {
 		List<String> posiblesMov = new ArrayList<>();
 
 		int fila = this.r.getFila();
@@ -563,23 +563,6 @@ public class Tablero {
 
 	}
 
-	// Carga la heuristica de la matriz completa
-	public void cargarHeuristicaMonedasTodaMatriz() {
-		double distanciaPonderada;
-		for (int k = 0; k < listaMonedas.size(); k++) {
-			for (int i = 0; i < N; i++) {
-				for (int j = 0; j < N; j++) {
-					if (posicionLibre(i, j)) {
-						distanciaPonderada = this.calcularHeuristica(this.listaMonedas.get(k), this.matriz[i][j]);
-						if (distanciaPonderada < this.matriz[i][j].getHeuristica()) {
-							this.matriz[i][j].setHeuristica(distanciaPonderada);
-						}
-					}
-				}
-			}
-		}
-	}
-
 	// Carga la heuristica solamente de las monedas
 	public void cargarHeuristicaMonedasv2() {
 		double mejor = calcularHeuristica(r, listaMonedas.get(0));
@@ -693,11 +676,4 @@ public class Tablero {
 				&& cartera == other.cartera && Objects.equals(r, other.r) && Objects.equals(mObjetivo, other.mObjetivo)
 				&& Objects.equals(salida, other.salida) && hucha == other.hucha;
 	}
-
-	public Double getHeuristicaTableroSinMatriz() {
-		return calcularHeuristica(r, mObjetivo);
-	}
-
-
-
 }

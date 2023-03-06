@@ -1,8 +1,8 @@
 import java.util.ArrayList;
 import java.util.List;
 
-public class MaximaPendiente {
-	private List<String> movEscaladaSimple;
+public class EscaladaSimple {
+    private List<String> movEscaladaSimple;
 	private boolean esFin;
 	private Tablero tablero;
 	private List<String> posiblesMov;
@@ -12,7 +12,7 @@ public class MaximaPendiente {
 	private double mejorHeuristica = 9999;
 	private boolean noMoves = false; // Usado para no realizar el movimiento dos veces en el caso de cargar la heuristica
 
-	public MaximaPendiente(Tablero tablero) {
+	public EscaladaSimple(Tablero tablero) {
 		movEscaladaSimple = new ArrayList<>();
 		posiblesMov =  new ArrayList<>();
 		esFin = false;
@@ -28,7 +28,7 @@ public class MaximaPendiente {
 	//	System.out.println(tablero.getHeuristicaTablero());
 	}
 
-	public void maximaPendiente() {
+	public void escaladaSimple() {
 		
 		//System.out.println("GETHEURISTICATABLERO "+tablero.getHeuristicaTablero(aux));
 
@@ -41,14 +41,13 @@ public class MaximaPendiente {
 			String mov = " ";
 			if (!esFin) {
 				posiblesMov = tablero.getPosiblesMov();
-				mejorHeuristica = 9999;
 				for (int i = 0; i < posiblesMov.size(); i++) {
 					// System.out.println("POSIBLES MOV:"+posiblesMov.get(i)+" HEURISTICA: "+ tablero.obtenerHeuristicaMovSinMatriz(posiblesMov.get(i)));
 					// System.out.println(mejorHeuristica);
-					if(tablero.getHeuristicaMovSinMatriz(posiblesMov.get(i)) < mejorHeuristica) {
+					if(tablero.getHeuristicaMovSinMatriz(posiblesMov.get(i)) < tablero.getHeuristicaTablero()) {
 						mov = posiblesMov.get(i);
 						mejorHeuristica = tablero.getHeuristicaMovSinMatriz(mov);
-						
+                        break;	
 					}
 				}
 				// System.out.println("OBTENERHEURISTICAMATRIZ "+tablero.obtenerHeuristicaMovSinMatriz(mov) );
@@ -73,11 +72,11 @@ public class MaximaPendiente {
 							// System.out.println("---------------------------------------------------------------------------------------------------");
 							// System.out.println(tablero.mObjetivo.getFila()+ " "  + tablero.mObjetivo.getColumna());
 							movEscaladaSimple.add(mov);
-							maximaPendiente();	
+							escaladaSimple();	
 						}
 						else {
 							movEscaladaSimple.add(mov);
-							maximaPendiente(); 
+							escaladaSimple(); 
 						}
 				}
 
@@ -98,13 +97,9 @@ public class MaximaPendiente {
 	}
 	public static void main(String[] args) {
         Datos_Iniciales d = new Datos_Iniciales("LABECOIN2.txt");
-        MaximaPendiente m = new MaximaPendiente(d.getTablero());
-        m.maximaPendiente();
+        EscaladaSimple m = new EscaladaSimple(d.getTablero());
+        m.escaladaSimple();
         m.mostrarResultados();
 
     }
 }
-
-
-
-
