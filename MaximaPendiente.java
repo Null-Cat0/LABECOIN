@@ -29,6 +29,8 @@ public class MaximaPendiente {
 	}
 
 	public void maximaPendiente() {
+		
+		System.out.println("GETHEURISTICATABLERO "+tablero.getHeuristicaTablero(aux));
 
 		enc = false;
 		noMoves = false;
@@ -41,27 +43,32 @@ public class MaximaPendiente {
 				posiblesMov = tablero.obtenerPosiblesMov();
 				mejorHeuristica = 9999;
 				for (int i = 0; i < posiblesMov.size(); i++) {
-					//System.out.println("POSIBLES MOV:"+posiblesMov.get(i)+" HEURISTICA: "+ tablero.obtenerHeuristicaMovSinMatriz(posiblesMov.get(i)));
+					System.out.println("POSIBLES MOV:"+posiblesMov.get(i)+" HEURISTICA: "+ tablero.obtenerHeuristicaMovSinMatriz(posiblesMov.get(i)));
+					System.out.println(mejorHeuristica);
 					if(tablero.obtenerHeuristicaMovSinMatriz(posiblesMov.get(i)) < mejorHeuristica) {
 						mov = posiblesMov.get(i);
-						mejorHeuristica = tablero.obtenerHeuristicaMov(mov);
+						mejorHeuristica = tablero.obtenerHeuristicaMovSinMatriz(mov);
 						
 					}
 				}
-		
+				System.out.println("OBTENERHEURISTICAMATRIZ "+tablero.obtenerHeuristicaMovSinMatriz(mov) );
+				System.out.println("GETHEURISTICATABLERO "+tablero.getHeuristicaTablero(aux));
 				
 				if (tablero.obtenerHeuristicaMovSinMatriz(mov) <= tablero.getHeuristicaTablero(aux) ) {
-					enc = true;
-					System.out.println(mov);
+						enc = true;
 						tablero.movimientoRobot(mov);
 						noMoves = true;
-						//tablero.resetearHeuristica();
 						System.out.println( "hucha "+ tablero.getHucha());
+						
 						if (tablero.getCartera() == tablero.getHucha()) {
-							aux = false;
+							//aux = false;
 							//return;
 							//tablero.cargarHeuristicaSalida();
-							// mejorHeuristica = tablero.calcularHeuristica(tablero.getRobot(), tablero.getSalida());
+							tablero.setmObjetivo(tablero.salida);
+							System.out.println("---------------------------------------------------------------------------------------------------");
+							System.out.println(tablero.mObjetivo.getFila()+ " "  + tablero.mObjetivo.getColumna());
+							maximaPendiente();
+							//return;	
 						}
 						else {
 							//tablero.cargarHeuristicaMonedasv2();
@@ -70,16 +77,7 @@ public class MaximaPendiente {
 							maximaPendiente(); 
 						}
 				}
-				System.out.println(enc);
-				System.out.println(noMoves);
-				System.out.println(mov);
-				if(!enc) esFin = true;
-				
-				else {
-					if(!noMoves) tablero.movimientoRobot(mov);					
-					movEscaladaSimple.add(mov);
-					maximaPendiente();
-				} 
+
 			} 		
 		} 
 	}
@@ -99,7 +97,7 @@ public class MaximaPendiente {
         Datos_Iniciales d = new Datos_Iniciales("LABECOIN2.txt");
         MaximaPendiente m = new MaximaPendiente(d.getTablero());
         m.maximaPendiente();
-       // m.mostrarResultados();
+       m.mostrarResultados();
 
     }
 }

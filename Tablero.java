@@ -133,9 +133,8 @@ public class Tablero {
 	}
 
 	public double getHeuristicaTablero(boolean aux) {
-		if(aux)
-		 return this.r.getHeuristica();
-		 return calcularHeuristica(this.r, this.salida);
+
+		 return calcularHeuristica(this.r, this.mObjetivo);
 	}
 
 	public boolean esMoneda(int fila, int columna) {
@@ -184,16 +183,13 @@ public class Tablero {
 	}
 
 	public void encontrarMObjetivo() {
-		System.out.println(listaMonedas.size());
 		if (listaMonedas != null) {
 			double mejorHueristica = this.calcularHeuristica(this.listaMonedas.get(0),
 					this.matriz[this.r.getFila()][this.r.getColumna()]);
 					this.mObjetivo = this.listaMonedas.get(0);
-					System.out.println(mejorHueristica);
 			for (int k = 1; k < listaMonedas.size(); k++) {
 				double distanciaPonderada = this.calcularHeuristica(this.listaMonedas.get(k),this.matriz[this.r.getFila()][this.r.getColumna()]);
 				if (distanciaPonderada < mejorHueristica) {
-					System.out.println(distanciaPonderada);
 					this.mObjetivo = this.listaMonedas.get(k);
 					mejorHueristica = distanciaPonderada;
 				}
@@ -221,51 +217,51 @@ public class Tablero {
 		double valor;
 		switch (direccion) {
 			case "A":
-				valor = calcularHeuristica(this.matriz[this.r.getFila()][this.r.getColumna()],
-						this.matriz[fila - 1][columna]);
+				valor = calcularHeuristica(this.matriz[fila - 1][columna],this.mObjetivo
+						);
 				// valor = calcularHeuristicaPosiciones(fila - 1, columna, mObjetivo);
 				break;
 
 			case "B":
-				valor = calcularHeuristica(this.matriz[this.r.getFila()][this.r.getColumna()],
-						this.matriz[fila + 1][columna]);
+				valor = calcularHeuristica(
+						this.matriz[fila + 1][columna],this.mObjetivo);
 				// valor = calcularHeuristicaPosiciones(fila + 1, columna, mObjetivo);
 				break;
 
 			case "D":
-				valor = calcularHeuristica(this.matriz[this.r.getFila()][this.r.getColumna()],
-						this.matriz[fila][columna + 1]);
+				valor = calcularHeuristica(
+						this.matriz[fila][columna + 1],this.mObjetivo);
 				// valor = calcularHeuristicaPosiciones(fila, columna + 1, mObjetivo);
 				break;
 
 			case "I":
-				valor = calcularHeuristica(this.matriz[this.r.getFila()][this.r.getColumna()],
-						this.matriz[fila][columna - 1]);
+				valor = calcularHeuristica(
+						this.matriz[fila][columna - 1],this.mObjetivo);
 				// valor = calcularHeuristicaPosiciones(fila, columna - 1, mObjetivo);
 				break;
 
 			// Diagonales
 			case "AI":
-				valor = calcularHeuristica(this.matriz[this.r.getFila()][this.r.getColumna()],
-						this.matriz[fila - 1][columna - 1]);
+				valor = calcularHeuristica(
+						this.matriz[fila - 1][columna - 1],this.mObjetivo);
 				// valor = calcularHeuristicaPosiciones(fila - 1, columna - 1, mObjetivo);
 				break;
 
 			case "AD":
-				valor = calcularHeuristica(this.matriz[this.r.getFila()][this.r.getColumna()],
-						this.matriz[fila - 1][columna + 1]);
+				valor = calcularHeuristica(
+						this.matriz[fila - 1][columna + 1],this.mObjetivo);
 				// valor = calcularHeuristicaPosiciones(fila - 1, columna + 1, mObjetivo);
 				break;
 
 			case "BD":
-				valor = calcularHeuristica(this.matriz[this.r.getFila()][this.r.getColumna()],
-						this.matriz[fila + 1][columna + 1]);
+				valor = calcularHeuristica(
+						this.matriz[fila + 1][columna + 1],this.mObjetivo);
 				// valor = calcularHeuristicaPosiciones(fila + 1, columna + 1, mObjetivo);
 				break;
 
 			case "BI":
-				valor = calcularHeuristica(this.matriz[this.r.getFila()][this.r.getColumna()],
-						this.matriz[fila + 1][columna - 1]);
+				valor = calcularHeuristica(
+						this.matriz[fila + 1][columna - 1],this.mObjetivo);
 				// valor = calcularHeuristicaPosiciones(fila + 1, columna - 1, mObjetivo);
 				break;
 
