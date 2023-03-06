@@ -16,7 +16,7 @@ public class Casilla {
 		fila = 0;
 		columna = 0;
 		valor = 0;
-		heuristica = -51;
+		heuristica = 10;
 	}
 
 	public int getFila() {

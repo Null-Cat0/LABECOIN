@@ -28,7 +28,7 @@ public class PrimeroMejor {
 	}
 	public List <Tablero> generarSucesores(Tablero tab) {
 		
-		List <String> posiblesMov = tab.obtenerPosiblesMov();
+		List <String> posiblesMov = tab.getPosiblesMov();
 		List <Tablero> hijos = new ArrayList<>();
 		boolean noMoves; // Usado para no realizar el movimiento dos veces en el caso de cargar la heuristica
 		Tablero hijo;
@@ -38,7 +38,7 @@ public class PrimeroMejor {
 			contadorNodos++;
 			String mov = posiblesMov.get(i);
 			noMoves = false;
-			if (hijo.obtenerHeuristicaMovSinMatriz(mov) == 0) {
+			if (hijo.getHeuristicaMovSinMatriz(mov) == 0) {
 				noMoves = true;
 				hijo.movimientoRobot(mov);
 				hijo.getListaMonedas().remove(hijo.mObjetivo);
