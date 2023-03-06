@@ -6,7 +6,7 @@ import java.util.Objects;
 
 public class Tablero {
 	private Casilla r;
-	private Casilla mObjetivo;
+	public Casilla mObjetivo;
 	Casilla salida;
 	public Casilla[][] matriz;
 	private List<Casilla> listaMonedas;
@@ -55,9 +55,11 @@ public class Tablero {
 	public Casilla getRobot() {
 		return this.r;
 	}
+
 	public Casilla getSalida() {
 		return this.salida;
 	}
+
 	public Casilla getmObjetivo() {
 		return this.mObjetivo;
 	}
@@ -130,13 +132,10 @@ public class Tablero {
 		this.numeroMonedas = numeroMonedas;
 	}
 
-	public double getHeuristicaTablero() {
-		int fila = this.r.getFila();
-		int columna = this.r.getColumna();
-		if (fila < 9 && columna < 9) 
-			return this.matriz[fila][columna].getHeuristica();
-			else return 5;
-		//return this.r.getHeuristica();
+	public double getHeuristicaTablero(boolean aux) {
+		if(aux)
+		 return this.r.getHeuristica();
+		 return calcularHeuristica(this.r, this.salida);
 	}
 
 	public boolean esMoneda(int fila, int columna) {
@@ -184,6 +183,24 @@ public class Tablero {
 
 	}
 
+	public void encontrarMObjetivo() {
+		System.out.println(listaMonedas.size());
+		if (listaMonedas != null) {
+			double mejorHueristica = this.calcularHeuristica(this.listaMonedas.get(0),
+					this.matriz[this.r.getFila()][this.r.getColumna()]);
+					this.mObjetivo = this.listaMonedas.get(0);
+					System.out.println(mejorHueristica);
+			for (int k = 1; k < listaMonedas.size(); k++) {
+				double distanciaPonderada = this.calcularHeuristica(this.listaMonedas.get(k),this.matriz[this.r.getFila()][this.r.getColumna()]);
+				if (distanciaPonderada < mejorHueristica) {
+					System.out.println(distanciaPonderada);
+					this.mObjetivo = this.listaMonedas.get(k);
+					mejorHueristica = distanciaPonderada;
+				}
+			}
+			this.r.setHeuristica(mejorHueristica);
+		}
+	}
 	/*
 	 * 
 	 * M�TODOS DE LA CLASE
@@ -192,10 +209,73 @@ public class Tablero {
 
 	// Devuelve si la posicion i , j de la matriz es un muro
 	public boolean posicionLibre(int i, int j) {
-	
-			return this.matriz[i][j].getValor() != 9;
+
+		return this.matriz[i][j].getValor() != 9;
 	}
 
+	public Double obtenerHeuristicaMovSinMatriz(String direccion) {
+
+		int fila = this.r.getFila();
+		int columna = this.r.getColumna();
+
+		double valor;
+		switch (direccion) {
+			case "A":
+				valor = calcularHeuristica(this.matriz[this.r.getFila()][this.r.getColumna()],
+						this.matriz[fila - 1][columna]);
+				// valor = calcularHeuristicaPosiciones(fila - 1, columna, mObjetivo);
+				break;
+
+			case "B":
+				valor = calcularHeuristica(this.matriz[this.r.getFila()][this.r.getColumna()],
+						this.matriz[fila + 1][columna]);
+				// valor = calcularHeuristicaPosiciones(fila + 1, columna, mObjetivo);
+				break;
+
+			case "D":
+				valor = calcularHeuristica(this.matriz[this.r.getFila()][this.r.getColumna()],
+						this.matriz[fila][columna + 1]);
+				// valor = calcularHeuristicaPosiciones(fila, columna + 1, mObjetivo);
+				break;
+
+			case "I":
+				valor = calcularHeuristica(this.matriz[this.r.getFila()][this.r.getColumna()],
+						this.matriz[fila][columna - 1]);
+				// valor = calcularHeuristicaPosiciones(fila, columna - 1, mObjetivo);
+				break;
+
+			// Diagonales
+			case "AI":
+				valor = calcularHeuristica(this.matriz[this.r.getFila()][this.r.getColumna()],
+						this.matriz[fila - 1][columna - 1]);
+				// valor = calcularHeuristicaPosiciones(fila - 1, columna - 1, mObjetivo);
+				break;
+
+			case "AD":
+				valor = calcularHeuristica(this.matriz[this.r.getFila()][this.r.getColumna()],
+						this.matriz[fila - 1][columna + 1]);
+				// valor = calcularHeuristicaPosiciones(fila - 1, columna + 1, mObjetivo);
+				break;
+
+			case "BD":
+				valor = calcularHeuristica(this.matriz[this.r.getFila()][this.r.getColumna()],
+						this.matriz[fila + 1][columna + 1]);
+				// valor = calcularHeuristicaPosiciones(fila + 1, columna + 1, mObjetivo);
+				break;
+
+			case "BI":
+				valor = calcularHeuristica(this.matriz[this.r.getFila()][this.r.getColumna()],
+						this.matriz[fila + 1][columna - 1]);
+				// valor = calcularHeuristicaPosiciones(fila + 1, columna - 1, mObjetivo);
+				break;
+
+			default:
+				valor = this.r.getHeuristica();
+		}
+
+		return valor;
+	}
+   
 	public Double obtenerHeuristicaMov(String direccion) {
 
 		int fila = this.r.getFila();
@@ -261,7 +341,7 @@ public class Tablero {
 
 		int fila = this.r.getFila();
 		int columna = this.r.getColumna();
-		if (fila < 9 && columna < 9 && fila >0 && columna >0) {
+		if (fila < 9 && columna < 9 && fila > 0 && columna > 0) {
 			if (posicionLibre(fila - 1, columna) /* && !this.lastMov.equals("B") */ )
 				posiblesMov.add("A");
 
@@ -302,7 +382,6 @@ public class Tablero {
 					if (esMoneda(fila - 1, columna)) {
 						hucha = hucha + this.matriz[fila - 1][columna].getValor();
 						this.numeroMonedas--;
-						
 
 					}
 					this.r.setFila(fila - 1);
@@ -318,7 +397,7 @@ public class Tablero {
 					if (esMoneda(fila + 1, columna)) {
 						hucha = hucha + this.matriz[fila + 1][columna].getValor();
 						this.numeroMonedas--;
-						
+
 					}
 					this.r.setFila(fila + 1);
 
@@ -333,7 +412,7 @@ public class Tablero {
 					if (esMoneda(fila, columna + 1)) {
 						hucha = hucha + this.matriz[fila][columna + 1].getValor();
 						this.numeroMonedas--;
-						
+
 					}
 					this.r.setColumna(columna + 1);
 
@@ -348,7 +427,6 @@ public class Tablero {
 					if (esMoneda(fila, columna - 1)) {
 						hucha = hucha + this.matriz[fila][columna - 1].getValor();
 						this.numeroMonedas--;
-						
 
 					}
 					this.r.setColumna(columna - 1);
@@ -365,7 +443,7 @@ public class Tablero {
 					if (esMoneda(fila - 1, columna - 1)) {
 						hucha = hucha + this.matriz[fila - 1][columna - 1].getValor();
 						this.numeroMonedas--;
-					
+
 					}
 					this.r.setFila(fila - 1);
 					this.r.setColumna(columna - 1);
@@ -620,5 +698,11 @@ public class Tablero {
 				&& cartera == other.cartera && Objects.equals(r, other.r) && Objects.equals(mObjetivo, other.mObjetivo)
 				&& Objects.equals(salida, other.salida) && hucha == other.hucha;
 	}
+
+	public Double getHeuristicaTableroSinMatriz() {
+		return calcularHeuristica(r, mObjetivo);
+	}
+
+
 
 }

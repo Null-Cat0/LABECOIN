@@ -24,7 +24,8 @@ public class PrimeroMejor {
 		actual.encontrarMonedas();
 		actual.encontrarSalida();
 		System.out.println("fila: "+actual.salida.getFila()+" columna: "+actual.salida.getColumna());
-		actual.cargarHeuristicaMonedasTodaMatriz();
+		actual.cargarHeuristicaMonedasv2();
+		//actual.cargarHeuristicaMonedasTodaMatriz();
 		
 	}
 	public List <Tablero> generarSucesores(Tablero tab) {
@@ -134,7 +135,7 @@ public class PrimeroMejor {
 		System.out.println("El numero de nodos generados es: " + contadorNodos);
 	}
     public static void main(String[] args) {
-        Datos_Iniciales d = new Datos_Iniciales("LABECOIN10.txt");
+        Datos_Iniciales d = new Datos_Iniciales("LABECOIN1.txt");
         PrimeroMejor m = new PrimeroMejor(d.getTablero());
 		
 		long initialTime;
