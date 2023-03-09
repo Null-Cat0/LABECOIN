@@ -496,12 +496,7 @@ public class Tablero {
 		}
 	}
 
-	// Calcula la distancia entre una casilla y una fila y columna
-	private double calcularDistanciaPosiciones(int f, int c, Casilla m) {
-		int filaMoneda = m.getFila();
-		int columnaMoneda = m.getColumna();
-		return (Math.sqrt(Math.pow(columnaMoneda - c, 2) + Math.pow(filaMoneda - f, 2)));
-	}
+
 
 	// Calcula la distancia entre dos casillas
 	private double calcularDistancia(Casilla r, Casilla m) {
@@ -521,10 +516,6 @@ public class Tablero {
 		return (calcularDistancia(r, m) * 1) + (m.getValor()) * 0.25;
 	}
 
-	// Obtiene la heuristica entre una posicion y una casilla
-	public double calcularHeuristicaPosiciones(int f, int c, Casilla m) {
-		return (calcularDistanciaPosiciones(f, c, m) * 1) + (m.getValor()) * 0.25;
-	}
 
 	// Copia un tablero en otro.
 	public Tablero copiarTablero() {
@@ -561,50 +552,6 @@ public class Tablero {
 			System.out.println();
 		}
 
-	}
-
-	// Carga la heuristica solamente de las monedas
-	public void cargarHeuristicaMonedasv2() {
-		double mejor = calcularHeuristica(r, listaMonedas.get(0));
-		Casilla mejorM = new Casilla(listaMonedas.get(0).getFila(), listaMonedas.get(0).getColumna(),
-				listaMonedas.get(0).getValor(), mejor);
-
-		// System.out.print("MEJOR: "+mejor);
-
-		for (int i = 1; i < listaMonedas.size(); i++) {
-			double aux = calcularHeuristica(r, listaMonedas.get(i));
-			listaMonedas.get(i).setHeuristica(aux);
-			// System.out.println(" AUX: "+aux);
-			if (aux < mejor) {
-				mejorM = listaMonedas.get(i);
-				mejor = aux;
-			}
-		}
-		if (mObjetivo == null) {
-			this.listaMonedas.remove(mejorM);
-			this.mObjetivo = new Casilla(mejorM.getFila(), mejorM.getColumna(), mejorM.getValor(),
-					mejorM.getHeuristica());
-			this.r.setHeuristica(mObjetivo.getHeuristica());
-			Collections.sort(listaMonedas, new CasillaHeuristicaComparator());
-
-		}
-		// System.out.print("MEJOR: "+mejor+ mejorM.getFilaMoneda()+"
-		// "+mejorM.getColumnaMoneda());
-	}
-
-	public void cargarHeuristicaSalida() {
-		double distanciaPonderada;
-		for (int i = 0; i < N; i++) {
-			for (int j = 0; j < N; j++) {
-				if (posicionLibre(i, j)) {
-					distanciaPonderada = this.calcularDistancia(salida, this.matriz[i][j]);
-
-					if (distanciaPonderada < this.matriz[i][j].getHeuristica()) {
-						this.matriz[i][j].setHeuristica(distanciaPonderada);
-					}
-				}
-			}
-		}
 	}
 
 	// Resetea la heristica

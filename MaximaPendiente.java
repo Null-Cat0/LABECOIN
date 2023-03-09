@@ -97,7 +97,7 @@ public class MaximaPendiente {
 		tablero.impresionMatrizVisual();
 	}
 	public static void main(String[] args) {
-        Datos_Iniciales d = new Datos_Iniciales("LABECOIN2.txt");
+        Datos_Iniciales d = new Datos_Iniciales("LABECOIN1.txt");
         MaximaPendiente m = new MaximaPendiente(d.getTablero());
         m.maximaPendiente();
         m.mostrarResultados();

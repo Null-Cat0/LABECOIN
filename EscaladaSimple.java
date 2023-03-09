@@ -96,7 +96,7 @@ public class EscaladaSimple {
 		tablero.impresionMatrizVisual();
 	}
 	public static void main(String[] args) {
-        Datos_Iniciales d = new Datos_Iniciales("LABECOIN2.txt");
+        Datos_Iniciales d = new Datos_Iniciales("LABECOIN1.txt");
         EscaladaSimple m = new EscaladaSimple(d.getTablero());
         m.escaladaSimple();
         m.mostrarResultados();
