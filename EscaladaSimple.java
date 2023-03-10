@@ -11,7 +11,7 @@ public class EscaladaSimple {
 	private boolean enc = false;
 	private double mejorHeuristica = 9999;
 	private boolean noMoves = false; // Usado para no realizar el movimiento dos veces en el caso de cargar la heuristica
-
+	private int contadorNodos;
 	public EscaladaSimple(Tablero tablero) {
 		movEscaladaSimple = new ArrayList<>();
 		posiblesMov =  new ArrayList<>();
@@ -82,5 +82,6 @@ public class EscaladaSimple {
 		
 		System.out.print("\nEstado final del tablero:\n" );
 		tablero.impresionMatrizVisual();
+		System.out.println("El numero de nodos generados es: " + contadorNodos);
 	}
 }
