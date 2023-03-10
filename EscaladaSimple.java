@@ -22,7 +22,6 @@ public class EscaladaSimple {
 		tablero.encontrarRobot(); 
 		tablero.encontrarMonedas();
 		tablero.encontrarSalida();
-		tablero.resetearHeuristica();
 		tablero.encontrarMObjetivo();
 	//	System.out.println(tablero.mObjetivo.getFila()+tablero.mObjetivo.getColumna());
 	//	System.out.println(tablero.getHeuristicaTablero());
@@ -96,7 +95,7 @@ public class EscaladaSimple {
 		tablero.impresionMatrizVisual();
 	}
 	public static void main(String[] args) {
-        Datos_Iniciales d = new Datos_Iniciales("LABECOIN1.txt");
+        Datos_Iniciales d = new Datos_Iniciales("LABECOIN2.txt");
         EscaladaSimple m = new EscaladaSimple(d.getTablero());
         m.escaladaSimple();
         m.mostrarResultados();

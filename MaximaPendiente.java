@@ -22,7 +22,6 @@ public class MaximaPendiente {
 		tablero.encontrarRobot(); 
 		tablero.encontrarMonedas();
 		tablero.encontrarSalida();
-		tablero.resetearHeuristica();
 		tablero.encontrarMObjetivo();
 	//	System.out.println(tablero.mObjetivo.getFila()+tablero.mObjetivo.getColumna());
 	//	System.out.println(tablero.getHeuristicaTablero());
@@ -97,7 +96,7 @@ public class MaximaPendiente {
 		tablero.impresionMatrizVisual();
 	}
 	public static void main(String[] args) {
-        Datos_Iniciales d = new Datos_Iniciales("LABECOIN1.txt");
+        Datos_Iniciales d = new Datos_Iniciales("LABECOIN2.txt");
         MaximaPendiente m = new MaximaPendiente(d.getTablero());
         m.maximaPendiente();
         m.mostrarResultados();

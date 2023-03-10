@@ -271,65 +271,6 @@ public class Tablero {
 
 		return valor;
 	}
-   
-	public Double getHeuristicaMov(String direccion) {
-
-		int fila = this.r.getFila();
-		int columna = this.r.getColumna();
-
-		double valor;
-		switch (direccion) {
-			case "A":
-				valor = this.matriz[fila - 1][columna].getHeuristica();
-				// valor = calcularHeuristicaPosiciones(fila - 1, columna, mObjetivo);
-				break;
-
-			case "B":
-				valor = this.matriz[fila + 1][columna].getHeuristica();
-				// valor = calcularHeuristicaPosiciones(fila + 1, columna, mObjetivo);
-				break;
-
-			case "D":
-				valor = this.matriz[fila][columna + 1].getHeuristica();
-				// valor = calcularHeuristicaPosiciones(fila, columna + 1, mObjetivo);
-				break;
-
-			case "I":
-				valor = this.matriz[fila][columna - 1].getHeuristica();
-				// valor = calcularHeuristicaPosiciones(fila, columna - 1, mObjetivo);
-				break;
-
-			// Diagonales
-			case "AI":
-				valor = this.matriz[fila - 1][columna - 1].getHeuristica();
-				// valor = calcularHeuristicaPosiciones(fila - 1, columna - 1, mObjetivo);
-				break;
-
-			case "AD":
-				valor = this.matriz[fila - 1][columna + 1].getHeuristica();
-				// valor = calcularHeuristicaPosiciones(fila - 1, columna + 1, mObjetivo);
-				break;
-
-			case "BD":
-				valor = this.matriz[fila + 1][columna + 1].getHeuristica();
-				// valor = calcularHeuristicaPosiciones(fila + 1, columna + 1, mObjetivo);
-				break;
-
-			case "BI":
-				valor = this.matriz[fila + 1][columna - 1].getHeuristica();
-				// valor = calcularHeuristicaPosiciones(fila + 1, columna - 1, mObjetivo);
-				break;
-
-			default:
-				valor = this.r.getHeuristica();
-		}
-
-		// System.out.println("FILA robot : "+fila+" COLUMNA robot :"+ columna +" FILA
-		// Moneda : "+mObjetivo.getFila()+" COLUMNA Moneda :"+ mObjetivo.getColumna() );
-		// if ((fila == mObjetivo.getFila()) && (columna == mObjetivo.getColumna()))
-		// valor = 0;
-		return valor;
-	}
 
 	// Devuelve la lista de movimientos que puede realizar el robot.
 	public List<String> getPosiblesMov() {
@@ -540,33 +481,6 @@ public class Tablero {
 		tab.numeroMonedas = this.numeroMonedas;
 		tab.setLastTablero(this);
 		return tab;
-	}
-
-	// Muestra por consola las monedas con sus valores correspondientes.
-	public void mostrarListaMonedas() {
-
-		for (int j = 0; j < listaMonedas.size(); j++) {
-			System.out.print("Fila moneda: " + listaMonedas.get(j).getFila() + " Columna moneda: "
-					+ listaMonedas.get(j).getColumna() + " Valor moneda: " + listaMonedas.get(j).getValor()
-					+ " Heuristica: " + listaMonedas.get(j).getHeuristica());
-			System.out.println();
-		}
-
-	}
-
-	// Resetea la heristica
-	public void resetearHeuristica() {
-		for (int i = 0; i < N; i++) {
-			for (int j = 0; j < N; j++) {
-				if (posicionLibre(i, j))
-					this.matriz[i][j].setHeuristica(100);
-			}
-		}
-	}
-
-	// Disminuye la cartera
-	public void reducirCartera(int valor) {
-		this.cartera -= valor;
 	}
 
 	// Imprime de una forma mas visual la matriz
