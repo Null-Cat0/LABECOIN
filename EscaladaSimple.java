@@ -23,14 +23,11 @@ public class EscaladaSimple {
 		tablero.encontrarMonedas();
 		tablero.encontrarSalida();
 		tablero.encontrarMObjetivo();
-	//	System.out.println(tablero.mObjetivo.getFila()+tablero.mObjetivo.getColumna());
-	//	System.out.println(tablero.getHeuristicaTablero());
 	}
 
 	public void escaladaSimple() {
 		
-		//System.out.println("GETHEURISTICATABLERO "+tablero.getHeuristicaTablero(aux));
-
+	
 		enc = false;
 		noMoves = false;
 
@@ -41,16 +38,12 @@ public class EscaladaSimple {
 			if (!esFin) {
 				posiblesMov = tablero.getPosiblesMov();
 				for (int i = 0; i < posiblesMov.size(); i++) {
-					// System.out.println("POSIBLES MOV:"+posiblesMov.get(i)+" HEURISTICA: "+ tablero.obtenerHeuristicaMovSinMatriz(posiblesMov.get(i)));
-					// System.out.println(mejorHeuristica);
 					if(tablero.getHeuristicaMovSinMatriz(posiblesMov.get(i)) < tablero.getHeuristicaTablero()) {
 						mov = posiblesMov.get(i);
 						mejorHeuristica = tablero.getHeuristicaMovSinMatriz(mov);
                         break;	
 					}
 				}
-				// System.out.println("OBTENERHEURISTICAMATRIZ "+tablero.obtenerHeuristicaMovSinMatriz(mov) );
-				// System.out.println("GETHEURISTICATABLERO "+tablero.getHeuristicaTablero(aux));
 				
 				if (tablero.getHeuristicaMovSinMatriz(mov) <= tablero.getHeuristicaTablero() ) {
 						enc = true;
@@ -64,12 +57,8 @@ public class EscaladaSimple {
 						
 						noMoves = true;
 						
-						// System.out.println( "hucha "+ tablero.getHucha());
-						
 						if (tablero.getCartera() == tablero.getHucha()) {
 							tablero.setmObjetivo(tablero.salida);
-							// System.out.println("---------------------------------------------------------------------------------------------------");
-							// System.out.println(tablero.mObjetivo.getFila()+ " "  + tablero.mObjetivo.getColumna());
 							movEscaladaSimple.add(mov);
 							escaladaSimple();	
 						}
@@ -94,11 +83,4 @@ public class EscaladaSimple {
 		System.out.print("\nEstado final del tablero:\n" );
 		tablero.impresionMatrizVisual();
 	}
-	public static void main(String[] args) {
-        Datos_Iniciales d = new Datos_Iniciales("LABECOIN2.txt");
-        EscaladaSimple m = new EscaladaSimple(d.getTablero());
-        m.escaladaSimple();
-        m.mostrarResultados();
-
-    }
 }

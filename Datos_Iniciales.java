@@ -81,8 +81,6 @@ public class Datos_Iniciales {
 				
 				i++;
 			}
-			System.out.println("Cartera: " + cartera_Aux);
-
 		} catch (FileNotFoundException e1) {
 			System.out.println("Fichero no encontrado");
 		} catch (IOException e) {

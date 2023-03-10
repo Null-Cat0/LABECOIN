@@ -48,6 +48,7 @@ public class Tablero {
 	}
 
 	/*
+	 * 
 	 * SET Y GET
 	 * 
 	 */
@@ -143,6 +144,7 @@ public class Tablero {
 
 	/*
 	 * 
+	 * 
 	 * BUSQUEDA DE ROBOT, MONEDAS....
 	 * 
 	 * 
@@ -199,7 +201,7 @@ public class Tablero {
 	}
 	/*
 	 * 
-	 * M�TODOS DE LA CLASE
+	 * METODOS DE LA CLASE
 	 * 
 	 */
 
@@ -219,50 +221,42 @@ public class Tablero {
 			case "A":
 				valor = calcularHeuristica(this.matriz[fila - 1][columna],this.mObjetivo
 						);
-				// valor = calcularHeuristicaPosiciones(fila - 1, columna, mObjetivo);
 				break;
 
 			case "B":
 				valor = calcularHeuristica(
 						this.matriz[fila + 1][columna],this.mObjetivo);
-				// valor = calcularHeuristicaPosiciones(fila + 1, columna, mObjetivo);
 				break;
 
 			case "D":
 				valor = calcularHeuristica(
 						this.matriz[fila][columna + 1],this.mObjetivo);
-				// valor = calcularHeuristicaPosiciones(fila, columna + 1, mObjetivo);
 				break;
 
 			case "I":
 				valor = calcularHeuristica(
 						this.matriz[fila][columna - 1],this.mObjetivo);
-				// valor = calcularHeuristicaPosiciones(fila, columna - 1, mObjetivo);
 				break;
 
 			// Diagonales
 			case "AI":
 				valor = calcularHeuristica(
 						this.matriz[fila - 1][columna - 1],this.mObjetivo);
-				// valor = calcularHeuristicaPosiciones(fila - 1, columna - 1, mObjetivo);
 				break;
 
 			case "AD":
 				valor = calcularHeuristica(
 						this.matriz[fila - 1][columna + 1],this.mObjetivo);
-				// valor = calcularHeuristicaPosiciones(fila - 1, columna + 1, mObjetivo);
 				break;
 
 			case "BD":
 				valor = calcularHeuristica(
 						this.matriz[fila + 1][columna + 1],this.mObjetivo);
-				// valor = calcularHeuristicaPosiciones(fila + 1, columna + 1, mObjetivo);
 				break;
 
 			case "BI":
 				valor = calcularHeuristica(
 						this.matriz[fila + 1][columna - 1],this.mObjetivo);
-				// valor = calcularHeuristicaPosiciones(fila + 1, columna - 1, mObjetivo);
 				break;
 
 			default:
@@ -279,28 +273,28 @@ public class Tablero {
 		int fila = this.r.getFila();
 		int columna = this.r.getColumna();
 		if (fila < 9 && columna < 9 && fila > 0 && columna > 0) {
-			if (posicionLibre(fila - 1, columna) /* && !this.lastMov.equals("B") */ )
+			if (posicionLibre(fila - 1, columna))
 				posiblesMov.add("A");
 
-			if (posicionLibre(fila + 1, columna) /* && !this.lastMov.equals("A") */ )
+			if (posicionLibre(fila + 1, columna))
 				posiblesMov.add("B");
 
-			if (posicionLibre(fila, columna - 1) /* && !this.lastMov.equals("D") */)
+			if (posicionLibre(fila, columna - 1))
 				posiblesMov.add("I");
 
-			if (posicionLibre(fila, columna + 1) /* && !this.lastMov.equals("I") */)
+			if (posicionLibre(fila, columna + 1))
 				posiblesMov.add("D");
 
-			if (posicionLibre(fila - 1, columna - 1) /* && !this.lastMov.equals("BD") */ )
+			if (posicionLibre(fila - 1, columna - 1))
 				posiblesMov.add("AI");
 
-			if (posicionLibre(fila - 1, columna + 1)/* && !this.lastMov.equals("BI") */)
+			if (posicionLibre(fila - 1, columna + 1))
 				posiblesMov.add("AD");
 
-			if (posicionLibre(fila + 1, columna + 1) /* && !this.lastMov.equals("AI") */)
+			if (posicionLibre(fila + 1, columna + 1))
 				posiblesMov.add("BD");
 
-			if (posicionLibre(fila + 1, columna - 1) /* && !this.lastMov.equals("AD") */)
+			if (posicionLibre(fila + 1, columna - 1))
 				posiblesMov.add("BI");
 		}
 		return posiblesMov;
@@ -448,8 +442,6 @@ public class Tablero {
 		return Math.round(
 				Math.sqrt(Math.pow(columnaMoneda - columnaRobot, 2) + Math.pow(filaMoneda - filaRobot, 2)) * 100.0)
 				/ 100.0;
-		// return (Math.sqrt(Math.pow(columnaMoneda - columnaRobot, 2) +
-		// Math.pow(filaMoneda - filaRobot, 2)));
 	}
 
 	// Obtiene la heuristica entre dos casillas

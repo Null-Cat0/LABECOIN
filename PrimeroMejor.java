@@ -1,8 +1,6 @@
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
 
 
@@ -12,7 +10,7 @@ public class PrimeroMejor {
 	private List <String> movimientos;
 	private Tablero actual;
 	private int contadorNodos;
-	static int maxNodos = 100001; 
+	static int maxNodos = 9999; 
 	
 	public PrimeroMejor(Tablero tab) {
 		actual = tab;
@@ -30,7 +28,7 @@ public class PrimeroMejor {
 		
 		List <String> posiblesMov = tab.getPosiblesMov();
 		List <Tablero> hijos = new ArrayList<>();
-		boolean noMoves; // Usado para no realizar el movimiento dos veces en el caso de cargar la heuristica
+		boolean noMoves;
 		Tablero hijo;
 		
 		for (int i = 0; i < posiblesMov.size(); i++) {
@@ -102,8 +100,8 @@ public class PrimeroMejor {
 	}
 	
 	public void mostrarResultados() {
-	//	if(contadorNodos >= maxNodos) System.out.println("La ejecucion se ha detenido porque se excede el numero de nodos generados");
-	//	else {
+		if(contadorNodos >= maxNodos) System.out.println("La ejecucion se ha detenido porque se excede el numero de nodos generados");
+		else {
 			System.out.println("Mostramos el camino recorrido: ");
 
 			Tablero aux = actual.getLastTablero();
@@ -125,22 +123,10 @@ public class PrimeroMejor {
 			System.out.println(movimientos.get(0));
 
 			System.out.println("\nEstado final del tablero:\n" );
-			System.out.println(actual.getHucha());
-			System.out.println(actual.getCartera());
+			System.out.println("Valor total de las monedas recogidas: "+actual.getHucha());
+			System.out.println("Valor total de la cartera: "+actual.getCartera());
 			actual.impresionMatrizVisual();
-	//	}
+		}
 		System.out.println("El numero de nodos generados es: " + contadorNodos);
 	}
-
-    public static void main(String[] args) {
-        Datos_Iniciales d = new Datos_Iniciales("LABECOIN1.txt");
-        PrimeroMejor m = new PrimeroMejor(d.getTablero());
-		
-		long initialTime;
-		initialTime = new Date().getTime();
-				
-        m.primeroMejor();
-        m.mostrarResultados();
-		System.out.println ("Tiempo total empleado: " + (new Date().getTime() - initialTime) + "ms");
-    }
 }
